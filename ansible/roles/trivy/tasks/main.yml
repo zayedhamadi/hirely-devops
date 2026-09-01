@@ -1,0 +1,32 @@
+---
+- name: Install Trivy prerequisites
+  apt:
+    name:
+      - wget
+      - gnupg
+    state: present
+
+- name: Ensure keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add Trivy GPG key
+  ansible.builtin.get_url:
+    url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+    dest: /etc/apt/keyrings/trivy.asc
+    mode: '0644'
+    force: false
+
+- name: Add Trivy repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_distribution_release }} main"
+    state: present
+    filename: trivy
+
+- name: Install Trivy
+  apt:
+    name: trivy
+    state: present
+    update_cache: true
