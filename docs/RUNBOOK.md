@@ -22,3 +22,8 @@
 - Premier vrai service K8s (MySQL avec PVC + Secret)
 - Jenkinsfile complet (checkout → build → sonar → docker → trivy → deploy)
 - Migration Azure (AKS + Terraform) une fois le pipeline local validé
+
+## Sanity check — RÉSULTAT (validé)
+- Déploiement nginx (2 replicas) : les 2 pods planifiés sur vmtwo (vmone a le taint control-plane NoSchedule — normal, comportement par défaut kubeadm)
+- ClusterIP + DNS interne (test-nginx-svc.hirely.svc.cluster.local) : requête curl réussie, page nginx retournée → réseau Calico + kube-proxy + CoreDNS tous validés
+- Conclusion : le cluster fonctionne de bout en bout. Capacité applicative réelle actuelle = 1 nœud (vmtwo) tant que le taint control-plane n'est pas retiré.
