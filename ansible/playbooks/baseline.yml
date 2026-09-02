@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+
+    - name: Install common packages
+      apt:
+        name:
+          - git
+          - curl
+          - htop
+          - tree
+        state: present
