@@ -1,0 +1,8 @@
+---
+- name: Deploy decrypted .env to backend project
+  copy:
+    src: "{{ playbook_dir }}/../files/backend.env"
+    dest: /home/vmonee/projects/stage_backend/microservice_intern/.env
+    mode: '0600'
+    owner: vmonee
+    group: vmonee
