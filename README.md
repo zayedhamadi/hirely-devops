@@ -4,8 +4,8 @@ Infrastructure as Code pour la plateforme Hirely (microservices Spring Boot + An
 
 ## Architecture
 
-- **vmone** (192.168.100.11) — control-plane Kubernetes, Ansible control node, Jenkins/SonarQube (à venir)
-- **vmtwo** (192.168.100.10) — worker node Kubernetes
+- **vmone**  — control-plane Kubernetes, Ansible control node, Jenkins/SonarQube (à venir)
+- **vmtwo**  — worker node Kubernetes
 
 ## Structure du repo
 
