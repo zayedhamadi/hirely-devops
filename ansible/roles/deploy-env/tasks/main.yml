@@ -1,15 +1,48 @@
 ---
-- name: Deploy decrypted .env to backend project root and all service folders
-  copy:
-    src: "{{ playbook_dir }}/../files/backend.env"
-    dest: "{{ item }}"
-    mode: '0600'
-    owner: vmonee
-    group: vmonee
-  loop:
-    - /home/vmonee/projects/stage_backend/microservice_intern/.env
-    - /home/vmonee/projects/stage_backend/microservice_intern/config/.env
-    - /home/vmonee/projects/stage_backend/microservice_intern/discovery/.env
-    - /home/vmonee/projects/stage_backend/microservice_intern/gateway/.env
-    - /home/vmonee/projects/stage_backend/microservice_intern/recrutement/.env
-    - /home/vmonee/projects/stage_backend/microservice_intern/user/.env
+- name: Déployer le .env déchiffré vers les projets backend
+  block:
+
+    - name: Vérifier que les dossiers de destination existent
+      stat:
+        path: "{{ item | dirname }}"
+      register: dest_dirs
+      loop:
+        - /home/vmonee/projects/stage_backend/microservice_intern/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/config/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/discovery/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/gateway/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/recrutement/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/user/.env
+
+    - name: Alerter si un dossier de destination manque
+      fail:
+        msg: "Dossier manquant : {{ item.item | dirname }} — clone/checkout le repo backend avant de déployer le .env"
+      loop: "{{ dest_dirs.results }}"
+      when: not item.stat.exists
+
+    - name: Deploy decrypted .env to backend project root and all service folders
+      copy:
+        src: "{{ playbook_dir }}/../files/backend.env"
+        dest: "{{ item }}"
+        mode: '0600'
+        owner: vmonee
+        group: vmonee
+      loop:
+        - /home/vmonee/projects/stage_backend/microservice_intern/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/config/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/discovery/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/gateway/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/recrutement/.env
+        - /home/vmonee/projects/stage_backend/microservice_intern/user/.env
+      notify: notify env deployed
+
+  rescue:
+    - name: Afficher le diagnostic en cas d'échec de déploiement .env
+      debug:
+        msg:
+          - "Échec du déploiement .env sur {{ inventory_hostname }}"
+          - "Vérifie : que ansible/files/backend.env existe et est déchiffrable (ansible-vault view files/backend.env), les permissions du dossier projects/"
+
+    - name: Faire échouer explicitement le run après diagnostic
+      fail:
+        msg: "Déploiement .env échoué sur {{ inventory_hostname }} — voir diagnostic ci-dessus"

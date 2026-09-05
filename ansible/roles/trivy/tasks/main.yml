@@ -1,32 +1,57 @@
 ---
-- name: Install Trivy prerequisites
-  apt:
-    name:
-      - wget
-      - gnupg
-    state: present
+- name: Installer et configurer Trivy
+  block:
 
-- name: Ensure keyrings directory exists
-  file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
+    - name: Install Trivy prerequisites
+      apt:
+        name:
+          - wget
+          - gnupg
+        state: present
 
-- name: Add Trivy GPG key
-  ansible.builtin.get_url:
-    url: https://aquasecurity.github.io/trivy-repo/deb/public.key
-    dest: /etc/apt/keyrings/trivy.asc
-    mode: '0644'
-    force: false
+    - name: Ensure keyrings directory exists
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
 
-- name: Add Trivy repository
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_distribution_release }} main"
-    state: present
-    filename: trivy
+    - name: Add Trivy GPG key
+      ansible.builtin.get_url:
+        url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+        dest: /etc/apt/keyrings/trivy.asc
+        mode: '0644'
+        force: false
 
-- name: Install Trivy
-  apt:
-    name: trivy
-    state: present
-    update_cache: true
+    - name: Add Trivy repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_distribution_release }} main"
+        state: present
+        filename: trivy
+
+    - name: Install Trivy
+      apt:
+        name: trivy
+        state: present
+        update_cache: true
+      notify: update trivy vulnerability database
+
+  rescue:
+    - name: Afficher le diagnostic en cas d'échec d'installation Trivy
+      debug:
+        msg:
+          - "Échec sur {{ inventory_hostname }}"
+          - "Vérifie : connectivité vers aquasecurity.github.io, la clé GPG (/etc/apt/keyrings/trivy.asc), apt update en direct"
+
+    - name: Tenter un apt update pour voir l'erreur exacte
+      command: apt-get update
+      register: apt_diag
+      changed_when: false
+      failed_when: false
+
+    - name: Afficher la sortie apt update
+      debug:
+        var: apt_diag.stdout_lines
+
+    - name: Faire échouer explicitement le run après diagnostic
+      fail:
+        msg: "Installation Trivy échouée sur {{ inventory_hostname }} — voir diagnostic ci-dessus"

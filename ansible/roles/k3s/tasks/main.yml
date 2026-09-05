@@ -1,0 +1,218 @@
+# ============================================================
+# NETTOYAGE ANCIEN KUBEADM
+# ============================================================
+
+- name: Vérifier si kubeadm est installé
+  command: which kubeadm
+  register: kubeadm_check
+  changed_when: false
+  failed_when: false
+
+- name: Reset kubeadm si présent
+  command: kubeadm reset -f
+  when: kubeadm_check.rc == 0
+
+- name: Purger les paquets kubeadm/kubelet/kubectl
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: absent
+    purge: true
+    update_cache: true
+
+- name: Supprimer le repo apt Kubernetes
+  file:
+    path: /etc/apt/sources.list.d/kubernetes.list
+    state: absent
+
+- name: Nettoyer les répertoires kubeadm résiduels
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/cni/net.d
+    - /etc/kubernetes
+    - /var/lib/etcd
+    - /var/lib/kubelet
+  when: kubeadm_check.rc == 0
+
+# ============================================================
+# PRÉREQUIS SYSTÈME
+# ============================================================
+
+- name: Désactiver swap immédiatement
+  command: swapoff -a
+  changed_when: false
+
+- name: Supprimer les entrées swap de fstab
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+
+- name: Charger les modules kernel nécessaires
+  copy:
+    dest: /etc/modules-load.d/k8s.conf
+    mode: "0644"
+    content: |
+      overlay
+      br_netfilter
+
+- name: Activer les modules kernel
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - overlay
+    - br_netfilter
+
+- name: Configurer les paramètres réseau Kubernetes
+  copy:
+    dest: /etc/sysctl.d/k8s.conf
+    mode: "0644"
+    content: |
+      net.bridge.bridge-nf-call-iptables = 1
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.ipv4.ip_forward = 1
+
+- name: Appliquer les paramètres sysctl
+  command: sysctl --system
+  changed_when: false
+
+# ============================================================
+# K3S SERVER / CONTROL-PLANE
+# Groupe Ansible : master
+# ============================================================
+
+- name: Installer et configurer K3s server
+  when: inventory_hostname in groups['master']
+  block:
+
+    - name: Vérifier si K3s est déjà installé
+      stat:
+        path: /usr/local/bin/k3s
+      register: k3s_bin
+
+    - name: Installer K3s server sans Flannel et sans Traefik
+      shell: |
+        curl -sfL https://get.k3s.io | \
+        INSTALL_K3S_EXEC="server \
+        --flannel-backend=none \
+        --disable-network-policy \
+        --disable=traefik \
+        --write-kubeconfig-mode=644" \
+        sh -
+      args:
+        executable: /bin/bash
+      when: not k3s_bin.stat.exists
+      register: k3s_install_result
+
+    - name: Attendre que le node-token soit disponible
+      wait_for:
+        path: /var/lib/rancher/k3s/server/node-token
+        timeout: 120
+
+    - name: Lire le node-token K3s
+      slurp:
+        src: /var/lib/rancher/k3s/server/node-token
+      register: k3s_token_raw
+
+    - name: Exposer le node-token comme fact Ansible
+      set_fact:
+        k3s_node_token: "{{ k3s_token_raw.content | b64decode | trim }}"
+
+    # --------------------------------------------------------
+    # CALICO
+    # --------------------------------------------------------
+
+    - name: Vérifier si Tigera Operator existe
+      command: k3s kubectl get deployment tigera-operator -n tigera-operator
+      register: tigera_operator_check
+      changed_when: false
+      failed_when: false
+
+    - name: Installer Tigera Operator
+      command: >
+        k3s kubectl create -f
+        https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+      when: tigera_operator_check.rc != 0
+
+    - name: Vérifier si les ressources Calico existent
+      command: k3s kubectl get installation.operator.tigera.io default
+      register: calico_installation_check
+      changed_when: false
+      failed_when: false
+
+    - name: Installer les Custom Resources Calico
+      command: >
+        k3s kubectl create -f
+        https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+      when: calico_installation_check.rc != 0
+
+  rescue:
+    - name: Afficher le diagnostic en cas d'échec d'installation K3s server
+      debug:
+        msg:
+          - "Échec sur {{ inventory_hostname }}"
+          - "Vérifie : connectivité (curl -sfL https://get.k3s.io), espace disque (df -h /), logs (journalctl -u k3s -n 50)"
+
+    - name: Récupérer les logs k3s pour investigation
+      command: journalctl -u k3s -n 30 --no-pager
+      register: k3s_logs
+      changed_when: false
+      failed_when: false
+
+    - name: Afficher les logs k3s
+      debug:
+        var: k3s_logs.stdout_lines
+
+    - name: Faire échouer explicitement le run après diagnostic
+      fail:
+        msg: "Installation K3s server échouée sur {{ inventory_hostname }} — voir diagnostic ci-dessus"
+
+# ============================================================
+# K3S AGENT / WORKER
+# Groupe Ansible : workers
+# ============================================================
+
+- name: Installer et configurer K3s agent
+  when: inventory_hostname in groups['workers']
+  block:
+
+    - name: Vérifier si K3s agent est déjà installé
+      stat:
+        path: /usr/local/bin/k3s-agent
+      register: k3s_agent_bin
+
+    - name: Installer K3s agent et rejoindre le cluster
+      shell: |
+        curl -sfL https://get.k3s.io | \
+        K3S_URL="https://{{ hostvars[groups['master'][0]]['ansible_host'] }}:6443" \
+        K3S_TOKEN="{{ hostvars[groups['master'][0]]['vault_k3s_node_token'] }}" \
+        sh -
+      args:
+        executable: /bin/bash
+      when: not k3s_agent_bin.stat.exists
+
+  rescue:
+    - name: Afficher le diagnostic en cas d'échec d'installation K3s agent
+      debug:
+        msg:
+          - "Échec du join sur {{ inventory_hostname }}"
+          - "Vérifie : connectivité vers le master (curl -k https://{{ hostvars[groups['master'][0]]['ansible_host'] }}:6443), le token vault, les logs (journalctl -u k3s-agent -n 50)"
+
+    - name: Récupérer les logs k3s-agent pour investigation
+      command: journalctl -u k3s-agent -n 30 --no-pager
+      register: k3s_agent_logs
+      changed_when: false
+      failed_when: false
+
+    - name: Afficher les logs k3s-agent
+      debug:
+        var: k3s_agent_logs.stdout_lines
+
+    - name: Faire échouer explicitement le run après diagnostic
+      fail:
+        msg: "Installation K3s agent échouée sur {{ inventory_hostname }} — voir diagnostic ci-dessus"

@@ -1,0 +1,15 @@
+---
+- name: Install observability stack (Prometheus, Grafana, Loki, Zipkin)
+  hosts: vmonee
+  become: true
+
+  vars_files:
+    - ../host_vars/vmonee/vault.yml
+
+  pre_tasks:
+    - name: Check Grafana Vault variable
+      ansible.builtin.debug:
+        msg: "Grafana variable defined: {{ vault_grafana_admin_password is defined }}"
+
+  roles:
+    - k8s_observability

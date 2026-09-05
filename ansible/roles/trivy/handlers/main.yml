@@ -1,0 +1,4 @@
+---
+- name: update trivy vulnerability database
+  command: trivy image --download-db-only
+  changed_when: true

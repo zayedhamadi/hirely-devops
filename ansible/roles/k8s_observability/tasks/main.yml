@@ -1,0 +1,70 @@
+---
+- name: Install python kubernetes module
+  ansible.builtin.pip:
+    name: kubernetes
+    state: present
+
+- name: Install Helm binary
+  ansible.builtin.shell: |
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
+
+- name: Add prometheus-community Helm repo
+  kubernetes.core.helm_repository:
+    name: prometheus-community
+    repo_url: https://prometheus-community.github.io/helm-charts
+
+- name: Add grafana Helm repo
+  kubernetes.core.helm_repository:
+    name: grafana
+    repo_url: https://grafana.github.io/helm-charts
+
+- name: Add openzipkin Helm repo
+  kubernetes.core.helm_repository:
+    name: openzipkin
+    repo_url: https://openzipkin.github.io/zipkin
+
+- name: Create monitoring namespace
+  kubernetes.core.k8s:
+    name: monitoring
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: /home/vmonee/.kube/config
+
+- name: Install kube-prometheus-stack (Prometheus + Grafana)
+  kubernetes.core.helm:
+    name: kube-prometheus-stack
+    chart_ref: prometheus-community/kube-prometheus-stack
+    release_namespace: monitoring
+    create_namespace: true
+    values_files:
+      - "{{ role_path }}/files/prometheus-values.yml"
+    values:
+      grafana:
+        adminPassword: "{{ vault_grafana_admin_password }}"
+    kubeconfig: /home/vmonee/.kube/config
+    wait: true
+    timeout: 10m
+
+- name: Install Loki stack (Loki + Promtail)
+  kubernetes.core.helm:
+    name: loki-stack
+    chart_ref: grafana/loki-stack
+    release_namespace: monitoring
+    values_files:
+      - "{{ role_path }}/files/loki-values.yml"
+    kubeconfig: /home/vmonee/.kube/config
+    wait: true
+    timeout: 10m
+
+- name: Install Zipkin
+  kubernetes.core.helm:
+    name: zipkin
+    chart_ref: openzipkin/zipkin
+    release_namespace: monitoring
+    create_namespace: true
+    kubeconfig: /home/vmonee/.kube/config
+    wait: true
+    timeout: 5m

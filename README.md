@@ -4,13 +4,14 @@ Infrastructure as Code pour la plateforme Hirely (microservices Spring Boot + An
 
 ## Architecture
 
-- **vmone**  — control-plane Kubernetes, Ansible control node, Jenkins/SonarQube (à venir)
-- **vmtwo**  — worker node Kubernetes
+- **vmonee** (192.168.100.14) — control-plane K3s, Ansible control node, Jenkins/SonarQube (à venir)
+- **vmtwo** (192.168.100.10) — worker node K3s
 
 ## Structure du repo
 
-- `ansible/` — provisioning automatisé des VM (Docker, Kubernetes, Trivy)
-- `k8s/` — manifests Kubernetes (namespaces, déploiements)
+- `ansible/` — provisioning automatisé des VM (Docker, K3s, Calico, Trivy, déploiement .env)
+- `k8s/` — manifests Kubernetes applicatifs (namespaces, MySQL, microservices, observability)
+- `ci/` — pipeline Jenkins (à venir)
 - `docs/` — documentation d'avancement (RUNBOOK.md)
 
 ## Repos liés
@@ -20,4 +21,4 @@ Infrastructure as Code pour la plateforme Hirely (microservices Spring Boot + An
 
 ## Stack
 
-Ansible · Docker · Kubernetes (kubeadm) · Calico · Trivy · Jenkins · SonarQube (en cours)
+Ansible · Docker · K3s · Calico · Trivy · Jenkins (à venir) · SonarQube (à venir) · Ansible Vault (secrets)

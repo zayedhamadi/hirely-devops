@@ -1,5 +1,8 @@
 *.retry
 *.log
 .vault_pass
-*.retry
-.vault_pass
+ansible/.vault_pass
+ansible/.ansible/
+files/k3s-node-token.txt
+ansible/files/k3s-node-token.txt
+ansible/files/backend.env
