@@ -16,9 +16,12 @@ spec:
       labels:
         app: mysql
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: vmonee
       containers:
         - name: mysql
           image: mysql:8.0
+          args: ["--performance-schema=OFF"]
           ports:
             - containerPort: 3306
           envFrom:
@@ -30,17 +33,25 @@ spec:
               memory: "256Mi"
             limits:
               cpu: "500m"
-              memory: "512Mi"
+              memory: "768Mi"
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           readinessProbe:
             exec:
               command:
                 - sh
                 - -c
                 - "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-            initialDelaySeconds: 20
             periodSeconds: 10
             timeoutSeconds: 5
           livenessProbe:
@@ -49,9 +60,9 @@ spec:
                 - sh
                 - -c
                 - "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-            initialDelaySeconds: 30
             periodSeconds: 15
             timeoutSeconds: 5
+            failureThreshold: 6
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:

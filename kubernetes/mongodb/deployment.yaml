@@ -16,9 +16,12 @@ spec:
       labels:
         app: mongodb
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: vmtwo
       containers:
         - name: mongodb
           image: mongo:7.0
+          args: ["--wiredTigerCacheSizeGB", "0.25"]
           ports:
             - containerPort: 27017
           envFrom:
@@ -34,21 +37,26 @@ spec:
           volumeMounts:
             - name: mongodb-storage
               mountPath: /data/db
+          startupProbe:
+            tcpSocket:
+              port: 27017
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 60
           readinessProbe:
             tcpSocket:
               port: 27017
-            initialDelaySeconds: 45
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 6
           livenessProbe:
             tcpSocket:
               port: 27017
-            initialDelaySeconds: 60
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 6
       volumes:
         - name: mongodb-storage
-          persistentVolumeClaim:
-            claimName: mongodb-pvc
+          hostPath:
+            path: /var/lib/rancher/k3s/storage/pvc-0e9fc8dd-8b43-4043-a1d7-c24b27baff6a_hirely_mongodb-pvc
+            type: Directory
