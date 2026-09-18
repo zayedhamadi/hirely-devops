@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  namespace: hirely
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - auth.hirely.local
+      secretName: auth-hirely-tls-secret
+  rules:
+    - host: auth.hirely.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak
+                port:
+                  number: 8080

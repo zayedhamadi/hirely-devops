@@ -1,8 +1,14 @@
 *.retry
 *.log
-.vault_pass
+
+# Ansible
 ansible/.vault_pass
 ansible/.ansible/
-files/k3s-node-token.txt
-ansible/files/k3s-node-token.txt
+
+# Secrets Ansible
 ansible/files/backend.env
+ansible/files/k3s-node-token.txt
+
+# Kubernetes secrets
+kubernetes/mysql/secret.yaml
+kubernetes/deployments/keycloak/employee-realm-realm.json

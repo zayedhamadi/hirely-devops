@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: recrutement-service
+  namespace: hirely
+spec:
+  selector:
+    app: recrutement-service
+  ports:
+    - port: 8082
+      targetPort: 8082

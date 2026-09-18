@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recrutement-service
+  namespace: hirely
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: recrutement-service
+  template:
+    metadata:
+      labels:
+        app: recrutement-service
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: recrutement-service
+          image: ghcr.io/zayedhamadi/recrutement-service:latest
+          ports:
+            - containerPort: 8082
+
+          envFrom:
+            - configMapRef:
+                name: recrutement-service-config
+            - secretRef:
+                name: recrutement-service-secret
+
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "384Mi"
+            limits:
+              cpu: "600m"
+              memory: "640Mi"
+
+          startupProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8082
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8082
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8082
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
