@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ item.key }}-config"
+  namespace: hirely
+data:
+{% for key, value in item.value.configmap.items() %}
+  {{ key }}: "{{ value }}"
+{% endfor %}

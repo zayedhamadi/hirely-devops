@@ -1,0 +1,91 @@
+# ansible/group_vars/all.yml
+# Définit, pour chaque microservice, les valeurs non sensibles (configmap)
+# et sensibles (secret, référencées depuis le vault).
+
+k8s_services:
+
+  #mysql:
+    #secret:
+      #MYSQL_ROOT_PASSWORD: "{{ vault_mysql_root_password }}"
+      #MYSQL_DATABASE: "{{ vault_mysql_database }}"
+      #MYSQL_USER: "{{ vault_mysql_app_user }}"
+      #MYSQL_PASSWORD: "{{ vault_mysql_app_password }}"
+
+  mongodb:
+    configmap: {}
+    secret:
+      MONGO_INITDB_ROOT_USERNAME: "{{ vault_mongo_root_user }}"
+      MONGO_INITDB_ROOT_PASSWORD: "{{ vault_mongo_root_password }}"
+      MONGO_INITDB_DATABASE: "recrutement_db"
+
+  discovery-service:
+    configmap:
+      SERVER_PORT: "8761"
+      EUREKA_URL: "http://discovery-service:8761/eureka/"
+    secret: {}
+
+  config-service:
+    configmap:
+      SERVER_PORT: "8888"
+      EUREKA_URL: "http://discovery-service:8761/eureka/"
+      CONFIG_GIT_URI: "{{ vault_config_git_uri }}"
+      CONFIG_GIT_BRANCH: "{{ vault_config_git_branch }}"
+      CONFIG_GIT_SEARCH_PATH: "{{ vault_config_git_search_path }}"
+    secret: {}
+
+  gateway:
+    configmap:
+      SERVER_PORT: "8080"
+      EUREKA_URL: "http://discovery-service:8761/eureka/"
+      CONFIG_SERVER_URL: "http://config-service:8888"
+    secret:
+      INTERNAL_API_KEY: "{{ vault_internal_api_key }}"
+
+  user-service:
+    configmap:
+      SERVER_PORT: "8081"
+      EUREKA_URL: "http://discovery-service:8761/eureka/"
+      CONFIG_SERVER_URL: "http://config-service:8888"
+      DB_URL: "jdbc:mysql://mysql:3306/{{ vault_mysql_database }}?createDatabaseIfNotExist=true"
+      DB_USERNAME: "{{ vault_mysql_app_user }}"
+      KEYCLOAK_URL: "http://keycloak:8080"
+      KEYCLOAK_ISSUER_URI: "http://keycloak:8080/realms/employee-realm"
+      KEYCLOAK_REALM: "employee-realm"
+      KEYCLOAK_CLIENT_ID: "employee-service"
+      EMAIL_HOST: "smtp.gmail.com"
+      EMAIL_PORT: "587"
+      BOOTSTRAP_ADMIN_ENABLED: "true"
+      NOM_ADMIN: "Admin"
+      PRENOM_ADMIN: "Systeme"
+    secret:
+      DB_PASSWORD: "{{ vault_mysql_app_password }}"
+      CLIENT_SECRET_KEYCLOAK: "{{ vault_keycloak_client_secret }}"
+      KEYCLOAK_ADMIN_USER: "{{ vault_keycloak_admin_user }}"
+      KEYCLOAK_ADMIN_PWD: "{{ vault_keycloak_admin_password }}"
+      EMAIL_USER: "{{ vault_email_user }}"
+      EMAIL_PASSWORD: "{{ vault_email_password }}"
+      EMAIL_ADMIN: "{{ vault_email_admin }}"
+      BOOTSTRAP_ADMIN_PASSWORD: "{{ vault_bootstrap_admin_password }}"
+      ID_CLIENT_PROVIDER_GOOGLE_KEYCCKLOAK_CONSOLE: "{{ vault_google_keycloak_client_id }}"
+      SECRET_KEY_PROVIDER_GOOGLE_KEYCCKLOAK_CONSOLE: "{{ vault_google_keycloak_client_secret }}"
+      GITHUB_CLIENT_ID: "{{ vault_github_client_id }}"
+      GITHUB_CLIENT_SECRET: "{{ vault_github_client_secret }}"
+      GOOGLE_CALENDAR_CLIENT_ID: "{{ vault_google_calendar_client_id }}"
+      GOOGLE_CALENDAR_CLIENT_SECRET: "{{ vault_google_calendar_client_secret }}"
+      GOOGLE_CALENDAR_REFRESH_TOKEN: "{{ vault_google_calendar_refresh_token }}"
+      INTERNAL_API_KEY: "{{ vault_internal_api_key }}"
+
+  recrutement-service:
+    configmap:
+      SERVER_PORT: "8082"
+      EUREKA_URL: "http://discovery-service:8761/eureka/"
+      CONFIG_SERVER_URL: "http://config-service:8888"
+      KEYCLOAK_ISSUER_URI: "http://keycloak:8080/realms/employee-realm"
+    secret:
+      MONGO_URI: "mongodb://{{ vault_mongo_root_user }}:{{ vault_mongo_root_password }}@mongodb:27017/recrutement_db?authSource=admin"
+      INTERNAL_API_KEY: "{{ vault_internal_api_key }}"
+      EMAIL_USER: "{{ vault_email_user }}"
+      EMAIL_PASSWORD: "{{ vault_email_password }}"
+      GOOGLE_CALENDAR_CLIENT_ID: "{{ vault_google_calendar_client_id }}"
+      GOOGLE_CALENDAR_CLIENT_SECRET: "{{ vault_google_calendar_client_secret }}"
+      GOOGLE_CALENDAR_REFRESH_TOKEN: "{{ vault_google_calendar_refresh_token }}"

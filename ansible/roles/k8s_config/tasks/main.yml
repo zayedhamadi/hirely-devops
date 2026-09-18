@@ -1,0 +1,61 @@
+---
+- name: Déployer ConfigMap et Secret pour chaque microservice
+  when: inventory_hostname in groups['master']
+  block:
+
+    - name: Rendre et appliquer le ConfigMap de chaque service
+      block:
+        - name: Générer le manifest ConfigMap
+          template:
+            src: configmap.yaml.j2
+            dest: "/tmp/{{ item.key }}-configmap-rendered.yaml"
+            mode: '0600'
+          loop: "{{ k8s_services | dict2items }}"
+          when: item.value.configmap is defined and item.value.configmap | length > 0
+
+        - name: Appliquer les ConfigMaps
+          command: "k3s kubectl apply -f /tmp/{{ item.key }}-configmap-rendered.yaml"
+          loop: "{{ k8s_services | dict2items }}"
+          when: item.value.configmap is defined and item.value.configmap | length > 0
+          register: cm_apply
+          changed_when: "'created' in cm_apply.stdout or 'configured' in cm_apply.stdout"
+
+        - name: Nettoyer les fichiers ConfigMap temporaires
+          file:
+            path: "/tmp/{{ item.key }}-configmap-rendered.yaml"
+            state: absent
+          loop: "{{ k8s_services | dict2items }}"
+          when: item.value.configmap is defined and item.value.configmap | length > 0
+
+    - name: Rendre et appliquer le Secret de chaque service
+      block:
+        - name: Générer le manifest Secret
+          template:
+            src: secret.yaml.j2
+            dest: "/tmp/{{ item.key }}-secret-rendered.yaml"
+            mode: '0600'
+          loop: "{{ k8s_services | dict2items }}"
+          when: item.value.secret is defined and item.value.secret | length > 0
+
+        - name: Appliquer les Secrets
+          command: "k3s kubectl apply -f /tmp/{{ item.key }}-secret-rendered.yaml"
+          loop: "{{ k8s_services | dict2items }}"
+          when: item.value.secret is defined and item.value.secret | length > 0
+          register: secret_apply
+          changed_when: "'created' in secret_apply.stdout or 'configured' in secret_apply.stdout"
+
+        - name: Supprimer les fichiers Secret temporaires en clair
+          file:
+            path: "/tmp/{{ item.key }}-secret-rendered.yaml"
+            state: absent
+          loop: "{{ k8s_services | dict2items }}"
+          when: item.value.secret is defined and item.value.secret | length > 0
+
+  rescue:
+    - name: Nettoyer tous les fichiers temporaires même en cas d'échec
+      shell: "rm -f /tmp/*-configmap-rendered.yaml /tmp/*-secret-rendered.yaml"
+      changed_when: false
+
+    - name: Faire échouer explicitement après nettoyage
+      fail:
+        msg: "Échec du déploiement ConfigMap/Secret sur {{ inventory_hostname }} — vérifier k8s_services dans group_vars/all.yml et la connexion au cluster"

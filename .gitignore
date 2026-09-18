@@ -12,3 +12,4 @@ ansible/files/k3s-node-token.txt
 # Kubernetes secrets
 kubernetes/mysql/secret.yaml
 kubernetes/deployments/keycloak/employee-realm-realm.json
+*.backup

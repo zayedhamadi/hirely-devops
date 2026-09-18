@@ -1,0 +1,45 @@
+---
+- name: Créer/mettre à jour le secret de pull GHCR
+  when: inventory_hostname in groups['master']
+  block:
+
+    - name: Générer le manifest du secret docker-registry (dry-run)
+      command: >
+        k3s kubectl create secret docker-registry ghcr-secret
+        --docker-server=ghcr.io
+        --docker-username={{ vault_ghcr_username }}
+        --docker-password={{ vault_ghcr_token }}
+        --docker-email=noreply@example.com
+        -n hirely
+        --dry-run=client
+        -o yaml
+      register: ghcr_secret_manifest
+      changed_when: false
+      no_log: true
+
+    - name: Écrire le manifest rendu dans un fichier temporaire
+      copy:
+        content: "{{ ghcr_secret_manifest.stdout }}"
+        dest: /tmp/ghcr-secret-rendered.yaml
+        mode: '0600'
+      no_log: true
+
+    - name: Appliquer le secret ghcr-secret
+      command: k3s kubectl apply -f /tmp/ghcr-secret-rendered.yaml
+      register: ghcr_apply
+      changed_when: "'created' in ghcr_apply.stdout or 'configured' in ghcr_apply.stdout"
+
+    - name: Supprimer le fichier temporaire en clair
+      file:
+        path: /tmp/ghcr-secret-rendered.yaml
+        state: absent
+
+  rescue:
+    - name: Nettoyer le fichier temporaire même en cas d'échec
+      file:
+        path: /tmp/ghcr-secret-rendered.yaml
+        state: absent
+
+    - name: Faire échouer explicitement après nettoyage
+      fail:
+        msg: "Échec de la création du secret ghcr-secret sur {{ inventory_hostname }} — vérifier vault_ghcr_username/vault_ghcr_token"
