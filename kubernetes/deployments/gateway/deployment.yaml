@@ -21,6 +21,7 @@ spec:
       containers:
         - name: gateway
           image: ghcr.io/zayedhamadi/gateway:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
 

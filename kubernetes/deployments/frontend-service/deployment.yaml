@@ -25,6 +25,7 @@ spec:
       containers:
         - name: frontend-service
           image: ghcr.io/zayedhamadi/frontend-microservice:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
 
