@@ -10,7 +10,7 @@ Infrastructure as Code pour la plateforme Hirely (microservices Spring Boot + An
 ## Structure du repo
 
 - `ansible/` — provisioning automatisé des VM (Docker, K3s, Calico, Trivy, déploiement .env)
-- `k8s/` — manifests Kubernetes applicatifs (namespaces, MySQL, microservices, observability)
+- `kubernetes/` — manifests Kubernetes applicatifs (namespaces, MySQL, microservices)
 - `ci/` — pipeline Jenkins (à venir)
 - `docs/` — documentation d'avancement (RUNBOOK.md)
 
