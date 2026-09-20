@@ -20,7 +20,7 @@ spec:
         kubernetes.io/hostname: vmtwo
       containers:
         - name: gateway
-          image: ghcr.io/zayedhamadi/gateway:latest
+          image: ghcr.io/zayedhamadi/gateway:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

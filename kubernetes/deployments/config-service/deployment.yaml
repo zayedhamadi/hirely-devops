@@ -37,7 +37,7 @@ spec:
       containers:
         - name: config-service
 
-          image: ghcr.io/zayedhamadi/config-service:latest
+          image: ghcr.io/zayedhamadi/config-service:1.0.0
           imagePullPolicy: IfNotPresent
 
           ports:

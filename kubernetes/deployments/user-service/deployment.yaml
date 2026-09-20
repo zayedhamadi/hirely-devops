@@ -18,7 +18,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: user-service
-          image: ghcr.io/zayedhamadi/user-service:latest
+          image: ghcr.io/zayedhamadi/user-service:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
