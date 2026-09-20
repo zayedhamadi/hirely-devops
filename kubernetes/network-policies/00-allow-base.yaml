@@ -12,6 +12,7 @@ spec:
           - mysql
           - mongodb
           - keycloak
+          - config-service
   policyTypes:
     - Ingress
   ingress:
