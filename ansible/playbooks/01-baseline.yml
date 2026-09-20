@@ -1,6 +1,12 @@
 ---
-- hosts: all
+- name: Configuration de base des VM
+  hosts: all
   become: true
+  vars:
+    net_interface: ens33
+    dns_servers:
+      - "1.1.1.1"
+      - "8.8.8.8"
   tasks:
     - name: Update apt cache
       apt:
@@ -14,3 +20,35 @@
           - htop
           - tree
         state: present
+
+    - name: Trouver le profil NetworkManager actif de l'interface
+      command:
+        argv: [nmcli, -g, GENERAL.CONNECTION, device, show, "{{ net_interface }}"]
+      register: nm_connection
+      changed_when: false
+      check_mode: false
+
+    - name: Verifier qu'un profil actif existe
+      assert:
+        that: nm_connection.stdout | length > 0
+        fail_msg: "Aucun profil NetworkManager actif sur {{ net_interface }}"
+
+    - name: Lire le DNS enregistre dans ce profil
+      command:
+        argv: [nmcli, -g, "ipv4.dns,ipv4.ignore-auto-dns", connection, show, "{{ nm_connection.stdout }}"]
+      register: nm_dns
+      changed_when: false
+      check_mode: false
+
+    - name: Enregistrer le DNS 1.1.1.1 et 8.8.8.8 dans le profil
+      command:
+        argv:
+          - nmcli
+          - connection
+          - modify
+          - "{{ nm_connection.stdout }}"
+          - ipv4.dns
+          - "{{ dns_servers | join(' ') }}"
+          - ipv4.ignore-auto-dns
+          - "yes"
+      when: nm_dns.stdout_lines != [dns_servers | join(','), 'yes']
