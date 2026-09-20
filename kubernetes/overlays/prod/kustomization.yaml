@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../..
+
+images:
+  - name: ghcr.io/zayedhamadi/config-service
+    newTag: 1.0.0
+  - name: ghcr.io/zayedhamadi/discovery-service
+    newTag: 1.0.0
+  - name: ghcr.io/zayedhamadi/frontend-microservice
+    newTag: 1.0.0
+  - name: ghcr.io/zayedhamadi/gateway
+    newTag: 1.0.0
+  - name: ghcr.io/zayedhamadi/recrutement-service
+    newTag: 1.0.0
+  - name: ghcr.io/zayedhamadi/user-service
+    newTag: 1.0.0

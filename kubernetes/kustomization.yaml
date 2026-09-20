@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  # bases de données
+  - mysql/deployment.yaml
+  - mysql/pvc.yaml
+  - mysql/service.yaml
+  - mongodb/deployment.yaml
+  - mongodb/pvc.yaml
+  - mongodb/service.yaml
+  # keycloak (le service est dans services/)
+  - deployments/keycloak/deployment.yaml
+  - deployments/keycloak/pvc.yaml
+  # applications
+  - deployments/config-service/deployment.yaml
+  - deployments/discovery-service/deployment.yaml
+  - deployments/frontend-service/deployment.yaml
+  - deployments/gateway/deployment.yaml
+  - deployments/recrutement-service/deployment.yaml
+  - deployments/user-service/deployment.yaml
+  # services
+  - services/config-service/service.yaml
+  - services/discovery-service/service.yaml
+  - services/frontend-service/service.yaml
+  - services/gateway/service.yaml
+  - services/keycloak/service.yaml
+  - services/recrutement-service/service.yaml
+  - services/user-service/service.yaml
+  # ingress
+  - ingress/frontend-ingress.yaml
+  - ingress/gateway-ingress.yaml
+  - ingress/keycloak-ingress.yaml
+  - ingress/websocket-ingress.yaml
+  # réseau
+  - network-policies/10-mysql.yaml
+  - network-policies/20-mongodb.yaml
+  - network-policies/30-keycloak.yaml
+  - network-policies/40-config-service.yaml
+  - network-policies/50-discovery-service.yaml
+  - network-policies/60-frontend-service.yaml
+  - network-policies/70-gateway.yaml
+  - network-policies/80-user-service.yaml
+  - network-policies/90-recrutement-service.yaml
+  # sauvegardes
+  - backup/mysql-backup.yaml
+  - backup/mongo-backup.yaml
