@@ -17,6 +17,9 @@ spec:
         - podSelector:
             matchLabels:
               app: keycloak
+        - podSelector:
+            matchLabels:
+              app: backup
       ports:
         - protocol: TCP
           port: 3306

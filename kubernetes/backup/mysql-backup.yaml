@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mysql-backup
+  namespace: hirely
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app: backup
+        spec:
+          restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/hostname: vmonee
+          containers:
+            - name: backup
+              image: mysql:8.0
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: MYSQL_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-secret
+                      key: MYSQL_ROOT_PASSWORD
+              command: ["sh", "-c"]
+              args:
+                - |
+                  set -e
+                  F=/backup/mysql-$(date +%F-%H%M).sql.gz
+                  mysqldump -h mysql -uroot --single-transaction --routines --triggers --databases employee_db keycloak_db | gzip > $F
+                  test -s $F
+                  chmod 644 $F
+                  find /backup -name 'mysql-*.sql.gz' -mtime +7 -delete
+              resources:
+                requests: {cpu: 50m, memory: 128Mi}
+                limits: {cpu: 300m, memory: 256Mi}
+              volumeMounts:
+                - {name: backup, mountPath: /backup}
+          volumes:
+            - name: backup
+              hostPath:
+                path: /var/backups/hirely
+                type: DirectoryOrCreate

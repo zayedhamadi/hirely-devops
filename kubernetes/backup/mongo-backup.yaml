@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongo-backup
+  namespace: hirely
+spec:
+  schedule: "15 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app: backup
+        spec:
+          restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/hostname: vmonee
+          containers:
+            - name: backup
+              image: mongo:7.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                    name: mongodb-secret
+              command: ["sh", "-c"]
+              args:
+                - |
+                  set -e
+                  F=/backup/mongo-$(date +%F-%H%M).archive.gz
+                  mongodump --host mongodb -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --archive=$F --gzip
+                  test -s $F
+                  chmod 644 $F
+                  find /backup -name 'mongo-*.archive.gz' -mtime +7 -delete
+              resources:
+                requests: {cpu: 50m, memory: 128Mi}
+                limits: {cpu: 300m, memory: 256Mi}
+              volumeMounts:
+                - {name: backup, mountPath: /backup}
+          volumes:
+            - name: backup
+              hostPath:
+                path: /var/backups/hirely
+                type: DirectoryOrCreate
