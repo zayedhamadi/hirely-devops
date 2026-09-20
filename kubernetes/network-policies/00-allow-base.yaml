@@ -4,7 +4,12 @@ metadata:
   name: allow-same-namespace-and-ingress
   namespace: hirely
 spec:
-  podSelector: {}
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: NotIn
+        values:
+          - mysql
   policyTypes:
     - Ingress
   ingress:

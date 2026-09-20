@@ -1,0 +1,308 @@
+============================================================
+HIRELY - GUIDE DES COMMANDES K3S / KUBECTL
+Cluster : vmonee (control-plane) + vmtwo (agent)
+Namespace applicatif : hirely
+============================================================
+
+CONVENTIONS
+- Les commandes supposent que k3s est installé sur vmonee.
+- `k` est un alias facultatif. Pour éviter les problèmes d'alias,
+  les exemples utilisent `sudo k3s kubectl` ou `kubectl` si configuré.
+- Sur vmonee, `sudo k3s kubectl` fonctionne même si kubeconfig n'est
+  pas configuré pour l'utilisateur.
+- Dans les commandes interactives, quitter avec exit.
+
+------------------------------------------------------------
+1. VÉRIFIER K3S ET KUBERNETES
+------------------------------------------------------------
+sudo systemctl status k3s --no-pager
+sudo systemctl is-active k3s
+sudo systemctl restart k3s
+sudo journalctl -u k3s -n 100 --no-pager
+sudo journalctl -u k3s -f
+sudo k3s --version
+sudo k3s kubectl version
+sudo k3s kubectl cluster-info
+sudo k3s kubectl get nodes -o wide
+sudo k3s kubectl get componentstatuses
+
+Alias temporaire pour la session courante :
+alias k='sudo k3s kubectl'
+k get nodes -o wide
+
+Kubeconfig utilisateur (vmonee) :
+mkdir -p ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown "$USER":"$USER" ~/.kube/config
+chmod 600 ~/.kube/config
+export KUBECONFIG=~/.kube/config
+kubectl get nodes -o wide
+
+ATTENTION : après changement de configuration/réseau, vérifier le
+kubeconfig et l'adresse du serveur avant de conclure à une panne.
+
+------------------------------------------------------------
+2. NŒUDS / AGENT / CONTROL-PLANE
+------------------------------------------------------------
+sudo k3s kubectl get nodes -o wide
+sudo k3s kubectl describe node vmonee
+sudo k3s kubectl describe node vmtwo
+sudo k3s kubectl get nodes --show-labels
+sudo k3s kubectl get pods -A -o wide --field-selector spec.nodeName=vmtwo
+sudo k3s kubectl get pods -A -o wide --field-selector spec.nodeName=vmonee
+
+Sur vmtwo (agent) :
+sudo systemctl status k3s-agent --no-pager
+sudo journalctl -u k3s-agent -n 100 --no-pager
+sudo journalctl -u k3s-agent -f
+
+------------------------------------------------------------
+3. VUE GÉNÉRALE DU CLUSTER
+------------------------------------------------------------
+sudo k3s kubectl get all -A
+sudo k3s kubectl get namespaces
+sudo k3s kubectl get pods -A -o wide
+sudo k3s kubectl get events -A --sort-by=.metadata.creationTimestamp
+sudo k3s kubectl get storageclass
+sudo k3s kubectl get pv,pvc -A
+sudo k3s kubectl get ingress -A
+sudo k3s kubectl get secrets -A
+sudo k3s kubectl get configmaps -A
+
+------------------------------------------------------------
+4. NAMESPACE HIRELY - COMMANDES COURANTES
+------------------------------------------------------------
+sudo k3s kubectl get all -n hirely -o wide
+sudo k3s kubectl get pods -n hirely -o wide
+sudo k3s kubectl get deployments -n hirely
+sudo k3s kubectl get services -n hirely
+sudo k3s kubectl get endpoints -n hirely
+sudo k3s kubectl get ingress -n hirely
+sudo k3s kubectl get pvc -n hirely
+sudo k3s kubectl get events -n hirely --sort-by=.metadata.creationTimestamp
+sudo k3s kubectl get pods -n hirely --show-labels
+
+------------------------------------------------------------
+5. DESCRIBE : POD / DEPLOYMENT / SERVICE / NODE
+------------------------------------------------------------
+# Remplacer <nom-pod> par le nom actuel du pod
+sudo k3s kubectl describe pod <nom-pod> -n hirely
+sudo k3s kubectl describe deployment <nom-deployment> -n hirely
+sudo k3s kubectl describe service <nom-service> -n hirely
+sudo k3s kubectl describe ingress <nom-ingress> -n hirely
+sudo k3s kubectl describe pvc <nom-pvc> -n hirely
+sudo k3s kubectl describe node vmonee
+
+# Décrire automatiquement les pods d'une application (label app)
+sudo k3s kubectl describe pods -n hirely -l app=mysql
+sudo k3s kubectl describe pods -n hirely -l app=mongodb
+sudo k3s kubectl describe pods -n hirely -l app=gateway
+
+------------------------------------------------------------
+6. LOGS DES PODS
+------------------------------------------------------------
+# Pod précis
+sudo k3s kubectl logs <nom-pod> -n hirely
+sudo k3s kubectl logs <nom-pod> -n hirely --tail=100
+sudo k3s kubectl logs <nom-pod> -n hirely -f
+sudo k3s kubectl logs <nom-pod> -n hirely --previous
+
+# Logs d'un Deployment (nom stable, pas besoin du suffixe du pod)
+sudo k3s kubectl logs deployment/mysql -n hirely --tail=100
+sudo k3s kubectl logs deployment/mongodb -n hirely --tail=100
+sudo k3s kubectl logs deployment/gateway -n hirely --tail=100
+sudo k3s kubectl logs deployment/user-service -n hirely --tail=100
+sudo k3s kubectl logs deployment/recrutement-service -n hirely --tail=100
+sudo k3s kubectl logs deployment/keycloak -n hirely --tail=100
+
+------------------------------------------------------------
+7. EXEC DANS MYSQL - POD DYNAMIQUE
+------------------------------------------------------------
+# Ouvre un shell MySQL directement, en détectant le pod via son label.
+# Le nom peut changer après un rollout/restart : pas besoin de le copier.
+POD=$(sudo k3s kubectl get pods -n hirely -l app=mysql -o jsonpath='{.items[0].metadata.name}') && echo "Pod MySQL: $POD" && sudo k3s kubectl exec -it -n hirely "$POD" -- sh
+
+# Depuis le shell du conteneur, ouvrir le client MySQL :
+mysql -u root -p
+
+# Ou directement depuis vmonee, sans ouvrir un shell intermédiaire :
+POD=$(sudo k3s kubectl get pods -n hirely -l app=mysql -o jsonpath='{.items[0].metadata.name}') && sudo k3s kubectl exec -it -n hirely "$POD" -- mysql -u root -p
+
+# Commandes SQL à exécuter dans le client MySQL :
+SHOW DATABASES;
+USE nom_base;
+SHOW TABLES;
+SELECT NOW();
+EXIT;
+
+# Voir les variables de l'environnement (attention : peut exposer des secrets)
+# À éviter dans un terminal partagé ou une capture d'écran.
+# sudo k3s kubectl exec -n hirely "$POD" -- printenv
+
+------------------------------------------------------------
+8. EXEC DANS MONGODB - POD DYNAMIQUE
+------------------------------------------------------------
+# Ouvre un shell dans le pod MongoDB en détectant son nom actuel.
+POD=$(sudo k3s kubectl get pods -n hirely -l app=mongodb -o jsonpath='{.items[0].metadata.name}') && echo "Pod MongoDB: $POD" && sudo k3s kubectl exec -it -n hirely "$POD" -- sh
+
+# Depuis le shell du conteneur :
+mongosh
+
+# Ou directement ouvrir mongosh depuis vmonee :
+POD=$(sudo k3s kubectl get pods -n hirely -l app=mongodb -o jsonpath='{.items[0].metadata.name}') && sudo k3s kubectl exec -it -n hirely "$POD" -- mongosh
+
+# Commandes MongoDB dans mongosh :
+show dbs
+use nom_base
+db.getCollectionNames()
+db.nom_collection.find().limit(5)
+exit
+
+# Si l'image exige une authentification, utiliser les identifiants prévus
+# dans les Secrets/configurations de ton déploiement. Ne pas les publier.
+
+------------------------------------------------------------
+9. EXEC GÉNÉRIQUE - POD DYNAMIQUE PAR LABEL
+------------------------------------------------------------
+# Exemple pour n'importe quel workload avec le label app=<application>
+POD=$(sudo k3s kubectl get pods -n hirely -l app=<application> -o jsonpath='{.items[0].metadata.name}') && echo "$POD" && sudo k3s kubectl exec -it -n hirely "$POD" -- sh
+
+# Si le conteneur contient bash :
+sudo k3s kubectl exec -it <nom-pod> -n hirely -- bash
+
+# Si plusieurs conteneurs sont dans le pod, préciser le conteneur :
+sudo k3s kubectl exec -it <nom-pod> -n hirely -c <nom-conteneur> -- sh
+
+------------------------------------------------------------
+10. REDÉMARRER / ROLLOUT / SCALE
+------------------------------------------------------------
+# Redémarrer un Deployment (Kubernetes recrée ses pods)
+sudo k3s kubectl rollout restart deployment/<deployment> -n hirely
+sudo k3s kubectl rollout status deployment/<deployment> -n hirely
+sudo k3s kubectl rollout history deployment/<deployment> -n hirely
+
+# Exemples
+sudo k3s kubectl rollout restart deployment/discovery-service -n hirely
+sudo k3s kubectl rollout restart deployment/gateway -n hirely
+sudo k3s kubectl rollout status deployment/gateway -n hirely
+
+# Modifier le nombre de replicas (attention aux bases de données stateful)
+sudo k3s kubectl scale deployment/<deployment> --replicas=2 -n hirely
+sudo k3s kubectl scale deployment/<deployment> --replicas=1 -n hirely
+
+# Annuler le dernier rollout si possible
+sudo k3s kubectl rollout undo deployment/<deployment> -n hirely
+
+ATTENTION : éviter de scaler MySQL/MongoDB à plusieurs replicas sans
+architecture de réplication adaptée. Ne pas supprimer les PVC/PV à l'aveugle.
+
+------------------------------------------------------------
+11. APPLIQUER / VALIDER LES MANIFESTS
+------------------------------------------------------------
+# Depuis la racine ~/hirely-devops
+sudo k3s kubectl apply -f kubernetes/namespace.yaml
+sudo k3s kubectl apply -f kubernetes/
+sudo k3s kubectl diff -f kubernetes/
+sudo k3s kubectl get all -n hirely -o wide
+
+# Vérification de syntaxe côté API (server-side dry run)
+sudo k3s kubectl apply --dry-run=server -f chemin/vers/manifest.yaml
+
+# Ne pas appliquer tout le dossier aveuglément si des manifests/Secrets
+# ne sont pas prêts. Vérifier les changements avec `diff` avant application.
+
+------------------------------------------------------------
+12. INGRESS / TLS / CERT-MANAGER
+------------------------------------------------------------
+sudo k3s kubectl get ingress -A
+sudo k3s kubectl describe ingress gateway-ingress -n hirely
+sudo k3s kubectl describe ingress keycloak-ingress -n hirely
+sudo k3s kubectl get certificates -A
+sudo k3s kubectl describe certificate api-hirely-cert -n hirely
+sudo k3s kubectl describe certificate auth-hirely-cert -n hirely
+sudo k3s kubectl get clusterissuer
+sudo k3s kubectl describe clusterissuer selfsigned-issuer
+
+# Vérifier les pods Ingress (namespace peut dépendre de l'installation)
+sudo k3s kubectl get pods -A | grep -i ingress
+sudo k3s kubectl get svc -A | grep -i ingress
+
+# Tests HTTPS locaux depuis une machine où les noms DNS/hosts sont configurés
+curl -k -I https://api.hirely.local:30873
+curl -k -I https://auth.hirely.local:30873
+
+------------------------------------------------------------
+13. TESTS RÉSEAU ENTRE SERVICES
+------------------------------------------------------------
+# DNS/service dans le namespace hirely
+sudo k3s kubectl get svc -n hirely
+sudo k3s kubectl get endpoints -n hirely
+
+# Lancer un pod temporaire de diagnostic (suppression automatique après exit)
+sudo k3s kubectl run netshoot --rm -it --restart=Never -n hirely --image=nicolaka/netshoot -- sh
+
+# Dans ce pod, exemples :
+# nslookup mysql.hirely.svc.cluster.local
+# nc -vz mysql 3306
+# nc -vz mongodb 27017
+# curl -I http://gateway:8080
+
+------------------------------------------------------------
+14. STOCKAGE / PVC / PV
+------------------------------------------------------------
+sudo k3s kubectl get pvc -n hirely -o wide
+sudo k3s kubectl get pv -o wide
+sudo k3s kubectl describe pvc <nom-pvc> -n hirely
+sudo k3s kubectl get storageclass
+
+# Ne pas supprimer un PVC pour « réparer » un pod sans avoir vérifié
+# la politique de rétention et la sauvegarde des données.
+
+------------------------------------------------------------
+15. DIAGNOSTIC RAPIDE EN CAS DE POD EN ERREUR
+------------------------------------------------------------
+sudo k3s kubectl get pods -n hirely -o wide
+sudo k3s kubectl get events -n hirely --sort-by=.metadata.creationTimestamp
+sudo k3s kubectl describe pod <nom-pod> -n hirely
+sudo k3s kubectl logs <nom-pod> -n hirely --tail=150
+sudo k3s kubectl logs <nom-pod> -n hirely --previous --tail=150
+sudo k3s kubectl get pod <nom-pod> -n hirely -o yaml
+sudo k3s kubectl top nodes
+sudo k3s kubectl top pods -A
+
+# État disque/mémoire côté Linux
+free -h
+df -h
+uptime
+sudo systemctl status k3s --no-pager
+
+------------------------------------------------------------
+16. SAUVEGARDE / PRÉCAUTIONS
+------------------------------------------------------------
+# Sauvegarder les manifests (depuis ~/hirely-devops)
+tar -czf ~/hirely-kubernetes-manifests-$(date +%F-%H%M).tar.gz kubernetes ansible docs README.md
+
+# Export de ressources (ne remplace PAS une vraie sauvegarde des bases)
+sudo k3s kubectl get deploy,svc,ingress,cm -n hirely -o yaml > ~/hirely-resources-$(date +%F-%H%M).yaml
+
+# Avant toute opération destructive :
+# 1) vérifier le namespace et le nom exact
+# 2) vérifier l'état des PVC/PV
+# 3) vérifier qu'une sauvegarde restaurable existe
+# 4) ne jamais afficher/committer les Secrets ou fichiers .env
+
+------------------------------------------------------------
+17. RAPPELS IMPORTANTS
+------------------------------------------------------------
+- `get` : afficher les ressources.
+- `describe` : détails + événements d'une ressource.
+- `logs` : journaux d'un conteneur.
+- `exec` : exécuter une commande dans un conteneur.
+- `rollout restart` : redémarrer proprement un Deployment.
+- Le nom du pod change souvent ; privilégier Deployment ou label app.
+- Les commandes MySQL/Mongo ci-dessus choisissent le premier pod
+  correspondant au label. Elles supposent qu'un pod correspondant existe.
+- Ne pas partager les mots de passe, tokens JWT, Secrets ou backend.env.
+============================================================
+FIN DU GUIDE
+============================================================
