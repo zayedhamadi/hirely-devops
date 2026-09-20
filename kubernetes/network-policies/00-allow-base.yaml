@@ -11,6 +11,7 @@ spec:
         values:
           - mysql
           - mongodb
+          - keycloak
   policyTypes:
     - Ingress
   ingress:
