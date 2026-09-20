@@ -14,6 +14,10 @@ spec:
           - keycloak
           - config-service
           - discovery-service
+          - gateway
+          - user-service
+          - recrutement-service
+          - frontend-service
   policyTypes:
     - Ingress
   ingress:

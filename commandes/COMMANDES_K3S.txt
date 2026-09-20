@@ -306,3 +306,125 @@ sudo k3s kubectl get deploy,svc,ingress,cm -n hirely -o yaml > ~/hirely-resource
 ============================================================
 FIN DU GUIDE
 ============================================================
+
+============================================================
+CALICO - POOL IP DES PODS KUBERNETES
+============================================================
+
+1. AFFICHER LES POOLS IP CONFIGURES
+
+k get ippools.crd.projectcalico.org
+
+Afficher la configuration complete :
+
+k get ippools.crd.projectcalico.org -o yaml
+
+Afficher uniquement les CIDR :
+
+k get ippools.crd.projectcalico.org \
+  -o custom-columns='POOL:.metadata.name,CIDR:.spec.cidr,BLOCK:.spec.blockSize,NODE_SELECTOR:.spec.nodeSelector'
+
+2. CONFIGURATION ACTUELLE DE MON CLUSTER HIRELY
+
+Pool : kubernetes-pod-pool
+CIDR : 10.42.0.0/16
+BlockSize : 26
+NodeSelector : all()
+VXLAN : CrossSubnet
+NAT outgoing : true
+
+Un autre pool existe :
+Pool : default-ipv4-ippool
+CIDR : 192.168.0.0/16
+NodeSelector : !all()
+
+Le nodeSelector !all() ne selectionne aucun noeud.
+Le pool kubernetes-pod-pool avec all() est celui
+qui est configure pour attribuer les IP aux workloads.
+
+3. QUE SIGNIFIE CIDR 10.42.0.0/16 ?
+
+10.42.0.0 est l'adresse de debut du reseau.
+ /16 signifie que les 16 premiers bits identifient le reseau.
+
+Le masque correspondant est :
+255.255.0.0
+
+La plage totale est :
+10.42.0.0 -> 10.42.255.255
+
+Cela represente 65 536 adresses au total.
+
+Les Pods recoivent automatiquement des IP dans cette plage,
+par exemple :
+10.42.6.118
+10.42.6.120
+10.42.6.121
+10.42.6.125
+10.42.189.229
+10.42.189.235
+
+Les IP ne sont pas attribuees dans l'ordre.
+Calico gere leur allocation selon les blocs disponibles
+et les noeuds Kubernetes.
+
+4. QUE SIGNIFIE BLOCKSIZE /26 ?
+
+Calico divise le pool en blocs d'adresses plus petits.
+
+Avec blockSize: 26 :
+Chaque bloc contient 64 adresses IP.
+
+Exemple de blocs :
+10.42.6.0/26
+10.42.6.64/26
+10.42.6.128/26
+10.42.6.192/26
+
+Calico attribue ces blocs aux noeuds selon les besoins.
+Les Pods obtiennent ensuite une IP disponible dans
+les blocs alloues.
+
+5. COMMENT L'IP D'UN POD EST ATTRIBUEE ?
+
+1. Kubernetes planifie le Pod sur un noeud.
+2. Le runtime du noeud appelle le plugin reseau Calico (CNI).
+3. Calico choisit une IP disponible dans un bloc du pool.
+4. L'interface reseau du Pod est configuree avec cette IP.
+5. Le Pod peut communiquer sur le reseau du cluster
+   selon la configuration reseau et les politiques appliquees.
+
+Exemple :
+Pod config-service sur vmtwo
+IP : 10.42.6.125
+
+Cette IP est interne au cluster.
+Elle n'est pas l'adresse IP de la VM vmtwo.
+
+6. COMMANDES POUR VERIFIER LES IP DES PODS
+
+k get pods -n hirely -o wide
+
+Voir les noeuds :
+
+k get nodes -o wide
+
+Voir les blocs Calico :
+
+k get blockaffinities.crd.projectcalico.org
+
+Voir les IPAM blocks Calico :
+
+k get ipamblocks.crd.projectcalico.org
+
+IMPORTANT :
+Ne pas modifier ou supprimer les IPPools, IPAM blocks
+ou PV sans verifier les consequences.
+Les IPPools definissent le reseau des Pods.
+Ils ne doivent pas chevaucher les reseaux utilises
+par les noeuds ou d'autres reseaux du cluster.
+
+============================================================
+FIN - CALICO IP POOL
+============================================================
+
