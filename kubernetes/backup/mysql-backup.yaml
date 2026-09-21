@@ -23,26 +23,32 @@ spec:
             - name: backup
               image: mysql:8.0
               imagePullPolicy: IfNotPresent
+              command: ["sh", "-c"]
+              args:
+                - |
+                  set -e
+                  F=/backup/mysql-$(date +%F-%H%M).sql
+                  mysqldump -h mysql -uroot --single-transaction --routines --triggers --databases employee_db keycloak_db > "$F"
+                  gzip -f "$F"
+                  test -s "$F.gz"
+                  chmod 644 "$F.gz"
+                  find /backup -name 'mysql-*.sql.gz' -mtime +7 -delete
               env:
                 - name: MYSQL_PWD
                   valueFrom:
                     secretKeyRef:
                       name: mysql-secret
                       key: MYSQL_ROOT_PASSWORD
-              command: ["sh", "-c"]
-              args:
-                - |
-                  set -e
-                  F=/backup/mysql-$(date +%F-%H%M).sql.gz
-                  mysqldump -h mysql -uroot --single-transaction --routines --triggers --databases employee_db keycloak_db | gzip > $F
-                  test -s $F
-                  chmod 644 $F
-                  find /backup -name 'mysql-*.sql.gz' -mtime +7 -delete
               resources:
-                requests: {cpu: 50m, memory: 128Mi}
-                limits: {cpu: 300m, memory: 256Mi}
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+                limits:
+                  cpu: 300m
+                  memory: 256Mi
               volumeMounts:
-                - {name: backup, mountPath: /backup}
+                - name: backup
+                  mountPath: /backup
           volumes:
             - name: backup
               hostPath:
