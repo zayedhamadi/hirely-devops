@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - argocd.hirely.local
+      secretName: argocd-hirely-tls
+  rules:
+    - host: argocd.hirely.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80

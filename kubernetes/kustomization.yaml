@@ -33,6 +33,7 @@ resources:
   - ingress/gateway-ingress.yaml
   - ingress/keycloak-ingress.yaml
   - ingress/websocket-ingress.yaml
+  - ingress/argocd-ingress.yaml
   # réseau
   - network-policies/10-mysql.yaml
   - network-policies/20-mongodb.yaml
