@@ -27,6 +27,15 @@ spec:
           envFrom:
             - secretRef:
                 name: mongodb-secret
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            # NOTE: no runAsNonRoot here — the official mongo image starts
+            # as root to fix data-dir permissions, then drops to the
+            # mongodb user internally via gosu.
           resources:
             requests:
               cpu: "250m"
@@ -37,6 +46,8 @@ spec:
           volumeMounts:
             - name: mongodb-storage
               mountPath: /data/db
+            - name: tmp
+              mountPath: /tmp
           startupProbe:
             tcpSocket:
               port: 27017
@@ -60,3 +71,6 @@ spec:
           hostPath:
             path: /var/lib/rancher/k3s/storage/pvc-0e9fc8dd-8b43-4043-a1d7-c24b27baff6a_hirely_mongodb-pvc
             type: Directory
+        - name: tmp
+          emptyDir: {}
+

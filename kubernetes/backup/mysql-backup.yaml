@@ -3,6 +3,9 @@ kind: CronJob
 metadata:
   name: mysql-backup
   namespace: hirely
+  # trivy:ignore:KSV-0118 -- ce job ecrit dans un hostPath (/var/backups/hirely)
+  # appartenant a root:root ; passer en non-root empecherait l'ecriture du
+  # backup. readOnlyRootFilesystem + capabilities drop ALL restent actifs.
 spec:
   schedule: "0 2 * * *"
   concurrencyPolicy: Forbid
@@ -39,6 +42,14 @@ spec:
                     secretKeyRef:
                       name: mysql-secret
                       key: MYSQL_ROOT_PASSWORD
+                - name: HOME
+                  value: /tmp
+              securityContext:
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
               resources:
                 requests:
                   cpu: 50m
@@ -49,8 +60,12 @@ spec:
               volumeMounts:
                 - name: backup
                   mountPath: /backup
+                - name: tmp
+                  mountPath: /tmp
           volumes:
             - name: backup
               hostPath:
                 path: /var/backups/hirely
                 type: DirectoryOrCreate
+            - name: tmp
+              emptyDir: {}

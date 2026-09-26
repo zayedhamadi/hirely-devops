@@ -16,6 +16,11 @@ spec:
     spec:
       imagePullSecrets:
         - name: ghcr-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: user-service
           image: ghcr.io/zayedhamadi/user-service:1.0.0
@@ -28,6 +33,17 @@ spec:
                 name: user-service-config
             - secretRef:
                 name: user-service-secret
+
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
 
           resources:
             requests:
@@ -58,3 +74,7 @@ spec:
               port: 8081
             periodSeconds: 15
             failureThreshold: 5
+      volumes:
+        - name: tmp
+          emptyDir: {}
+

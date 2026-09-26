@@ -34,6 +34,12 @@ spec:
 
       terminationGracePeriodSeconds: 30
 
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+
       containers:
         - name: config-service
 
@@ -82,7 +88,20 @@ spec:
               memory: "512Mi"
 
           securityContext:
+            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: spring-home-config
+              mountPath: /home/spring/.config
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: spring-home-config
+          emptyDir: {}
+

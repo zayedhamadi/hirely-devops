@@ -22,12 +22,31 @@ spec:
       imagePullSecrets:
         - name: ghcr-secret
 
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 101
+
       containers:
         - name: frontend-service
           image: ghcr.io/zayedhamadi/frontend-microservice:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
 
           resources:
             requests:
@@ -54,3 +73,11 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 3
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+

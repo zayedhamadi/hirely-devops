@@ -18,6 +18,11 @@ spec:
         - name: ghcr-secret
       nodeSelector:
         kubernetes.io/hostname: vmtwo
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: gateway
           image: ghcr.io/zayedhamadi/gateway:1.0.0
@@ -30,6 +35,17 @@ spec:
                 name: gateway-config
             - secretRef:
                 name: gateway-secret
+
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
 
           resources:
             requests:
@@ -60,3 +76,7 @@ spec:
               port: 8080
             periodSeconds: 15
             failureThreshold: 5
+      volumes:
+        - name: tmp
+          emptyDir: {}
+

@@ -27,6 +27,15 @@ spec:
           envFrom:
             - secretRef:
                 name: mysql-secret
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              # NOTE: no runAsNonRoot here — the official mysql image needs
+              # to start as root to chown/init the data directory, then
+              # drops privileges internally to the mysql user via gosu.
           resources:
             requests:
               cpu: "250m"
@@ -37,6 +46,10 @@ spec:
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
+            - name: tmp
+              mountPath: /tmp
+            - name: run-mysqld
+              mountPath: /var/run/mysqld
           startupProbe:
             exec:
               command:
@@ -67,3 +80,8 @@ spec:
         - name: mysql-storage
           persistentVolumeClaim:
             claimName: mysql-pvc
+        - name: tmp
+          emptyDir: {}
+        - name: run-mysqld
+          emptyDir: {}
+

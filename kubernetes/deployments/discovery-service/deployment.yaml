@@ -16,6 +16,11 @@ spec:
     spec:
       imagePullSecrets:
         - name: ghcr-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: discovery-service
           image: ghcr.io/zayedhamadi/discovery-service:1.0.0
@@ -25,6 +30,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: discovery-service-config
+
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
 
           resources:
             requests:
@@ -55,3 +71,7 @@ spec:
               port: 8761
             periodSeconds: 15
             failureThreshold: 5
+      volumes:
+        - name: tmp
+          emptyDir: {}
+
