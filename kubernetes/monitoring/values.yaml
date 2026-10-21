@@ -1,0 +1,93 @@
+fullnameOverride: kps
+
+alertmanager:
+  enabled: false
+
+# Composants non accessibles sur K3s
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeProxy:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    resources:
+      requests: { cpu: 100m, memory: 400Mi }
+      limits:   { cpu: 500m, memory: 1Gi }
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: local-path
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+    # Scrape des services Hirely
+    additionalScrapeConfigs:
+      - job_name: hirely-apps
+        metrics_path: /actuator/prometheus
+        scrape_interval: 60s
+        static_configs:
+          - targets: ["gateway.hirely.svc:8080"]
+            labels: { app: gateway }
+          - targets: ["user-service.hirely.svc:8081"]
+            labels: { app: user-service }
+          - targets: ["recrutement-service.hirely.svc:8082"]
+            labels: { app: recrutement-service }
+
+grafana:
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
+  persistence:
+    enabled: true
+    storageClassName: local-path
+    size: 2Gi
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits:   { cpu: 300m, memory: 384Mi }
+  grafana.ini:
+    server:
+      domain: grafana.hirely.local
+      root_url: https://grafana.hirely.local:30873/
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: selfsigned-issuer
+    hosts:
+      - grafana.hirely.local
+    tls:
+      - secretName: grafana-hirely-tls
+        hosts:
+          - grafana.hirely.local
+
+prometheus-node-exporter:
+  resources:
+    limits: { cpu: 100m, memory: 64Mi }
+
+kube-state-metrics:
+  resources:
+    limits: { cpu: 100m, memory: 128Mi }
+prometheusOperator:
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits:   { cpu: 300m, memory: 256Mi }
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 10
+    failureThreshold: 6
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 10
+    failureThreshold: 6
