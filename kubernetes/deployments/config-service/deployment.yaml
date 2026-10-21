@@ -20,7 +20,7 @@ spec:
 
   selector:
     matchLabels:
-      app: config-service
+      app: aaaaaa
 
   template:
     metadata:
