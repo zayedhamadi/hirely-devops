@@ -65,7 +65,7 @@ spec:
             - name: KC_HTTP_MANAGEMENT_PORT
               value: "9000"
           securityContext:
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
             allowPrivilegeEscalation: false
             capabilities:
               drop:
