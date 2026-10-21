@@ -18,31 +18,49 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: vmonee
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
       containers:
         - name: mysql
           image: mysql:8.0
           args: ["--performance-schema=OFF"]
-          ports:
-            - containerPort: 3306
           envFrom:
             - secretRef:
                 name: mysql-secret
-          securityContext:
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-              # NOTE: no runAsNonRoot here — the official mysql image needs
-              # to start as root to chown/init the data directory, then
-              # drops privileges internally to the mysql user via gosu.
+          ports:
+            - containerPort: 3306
           resources:
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: 250m
+              memory: 256Mi
             limits:
-              cpu: "500m"
-              memory: "768Mi"
+              cpu: 500m
+              memory: 768Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          startupProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
+            failureThreshold: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
+            failureThreshold: 6
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
+            periodSeconds: 10
+            timeoutSeconds: 5
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
@@ -50,32 +68,6 @@ spec:
               mountPath: /tmp
             - name: run-mysqld
               mountPath: /var/run/mysqld
-          startupProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 30
-          readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-            periodSeconds: 10
-            timeoutSeconds: 5
-          livenessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-            periodSeconds: 15
-            timeoutSeconds: 5
-            failureThreshold: 6
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:
@@ -84,4 +76,3 @@ spec:
           emptyDir: {}
         - name: run-mysqld
           emptyDir: {}
-

@@ -18,54 +18,55 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: vmtwo
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
       containers:
         - name: mongodb
           image: mongo:7.0
           args: ["--wiredTigerCacheSizeGB", "0.25"]
-          ports:
-            - containerPort: 27017
           envFrom:
             - secretRef:
                 name: mongodb-secret
-          securityContext:
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            # NOTE: no runAsNonRoot here — the official mongo image starts
-            # as root to fix data-dir permissions, then drops to the
-            # mongodb user internally via gosu.
+          ports:
+            - containerPort: 27017
           resources:
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: 250m
+              memory: 256Mi
             limits:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          startupProbe:
+            tcpSocket:
+              port: 27017
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 27017
+            failureThreshold: 6
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+            failureThreshold: 6
+            periodSeconds: 10
+            timeoutSeconds: 5
           volumeMounts:
             - name: mongodb-storage
               mountPath: /data/db
             - name: tmp
               mountPath: /tmp
-          startupProbe:
-            tcpSocket:
-              port: 27017
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 60
-          readinessProbe:
-            tcpSocket:
-              port: 27017
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 6
-          livenessProbe:
-            tcpSocket:
-              port: 27017
-            periodSeconds: 15
-            timeoutSeconds: 5
-            failureThreshold: 6
       volumes:
         - name: mongodb-storage
           hostPath:
@@ -73,4 +74,3 @@ spec:
             type: Directory
         - name: tmp
           emptyDir: {}
-
