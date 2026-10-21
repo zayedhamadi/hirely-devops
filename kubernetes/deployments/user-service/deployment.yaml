@@ -59,13 +59,15 @@ spec:
               port: 8081
             initialDelaySeconds: 30
             periodSeconds: 10
-            failureThreshold: 30
+            timeoutSeconds: 5
+            failureThreshold: 60
 
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8081
             periodSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 6
 
           livenessProbe:
@@ -73,6 +75,7 @@ spec:
               path: /actuator/health/liveness
               port: 8081
             periodSeconds: 15
+            timeoutSeconds: 5
             failureThreshold: 5
       volumes:
         - name: tmp
