@@ -1,0 +1,5 @@
+misconfigurations:
+  - id: KSV-0014
+    statement: "Durcissement prévu plus tard"
+  - id: KSV-0118
+    statement: "Durcissement prévu plus tard"
