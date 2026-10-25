@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Rapport de sécurité Trivy</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; background: #f5f6f8; color: #222; }
+  h1 { margin-bottom: 4px; }
+  h2 { margin-top: 0; }
+  .box { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th { background: #2c3e50; color: #fff; text-align: left; padding: 8px; }
+  td { padding: 8px; border-bottom: 1px solid #e3e6ea; vertical-align: top; }
+  tr:hover td { background: #fafbfc; }
+  .sev { padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: bold; font-size: 12px; }
+  .CRITICAL { background: #c0392b; }
+  .HIGH { background: #e67e22; }
+  .MEDIUM { background: #f1c40f; color: #222; }
+  .LOW { background: #3498db; }
+  .UNKNOWN { background: #7f8c8d; }
+  .ok { color: #1e8449; font-weight: bold; }
+  .nofix { color: #c0392b; font-weight: bold; }
+  code { background: #eef0f3; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Rapport de sécurité Trivy</h1>
+
+<div class="box">
+  <h2>Service : __SERVICE__</h2>
+  <p>Image : <code>__IMAGE__</code></p>
+  <p>Build Jenkins n°__BUILD__ - généré le __DATE__</p>
+  <p>Seules les failles <b>HIGH</b> et <b>CRITICAL</b> avec un correctif disponible sont listées.
+     Si aucun tableau n'apparaît plus bas, aucune faille de ce type n'a été trouvée.</p>
+</div>
+
+<div class="box">
+  <h2>Comment lire ce rapport</h2>
+  <table>
+    <tr><th>Colonne</th><th>Signification</th></tr>
+    <tr><td>Bibliothèque</td><td>Le composant concerné : un fichier <code>.jar</code> Java ou un paquet du système.</td></tr>
+    <tr><td>CVE</td><td>Numéro officiel de la faille. Clique dessus pour lire le détail.</td></tr>
+    <tr><td>Gravité</td><td><span class="sev CRITICAL">CRITICAL</span> bloque le pipeline.
+        <span class="sev HIGH">HIGH</span> est à corriger bientôt mais ne bloque pas.</td></tr>
+    <tr><td>Version installée</td><td>La version utilisée actuellement dans ton image.</td></tr>
+    <tr><td>Version corrigée</td><td>La version qui contient le correctif. Il suffit de passer à cette version (ou plus récente).</td></tr>
+    <tr><td>Description</td><td>Résumé du risque en une phrase.</td></tr>
+  </table>
+</div>
+<div class="box">
+  <h2>ghcr.io/zayedhamadi/frontend-microservice:1.0.0 (alpine 3.21.3)</h2>
+  <p>58 faille(s) détectée(s)</p>
+  <table>
+    <tr>
+      <th>Bibliothèque</th>
+      <th>CVE</th>
+      <th>Gravité</th>
+      <th>Version installée</th>
+      <th>Version corrigée</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>brotli-libs</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-111497">CVE-2026-111497</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.1.0-r2</td>
+      <td><span class="ok">1.1.1-r0</span></td>
+      <td>brotli: Out-of-Bounds Write in Google Brotli Decoder</td>
+    </tr>
+    <tr>
+      <td>c-ares</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-33630">CVE-2026-33630</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.34.5-r0</td>
+      <td><span class="ok">1.34.8-r0</span></td>
+      <td>c-ares: c-ares: Use-after-free / double-free in query-completion handling</td>
+    </tr>
+    <tr>
+      <td>curl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-5773">CVE-2026-5773</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: libcurl: Wrong file transfer due to incorrect SMB connection reuse</td>
+    </tr>
+    <tr>
+      <td>curl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-6276">CVE-2026-6276</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: libcurl: Information disclosure due to cookie leak when reusing connections with custom Host headers</td>
+    </tr>
+    <tr>
+      <td>curl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8286">CVE-2026-8286</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: curl: Insecure connection establishment due to TLS configuration mismatch</td>
+    </tr>
+    <tr>
+      <td>curl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8927">CVE-2026-8927</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: Information disclosure due to uncleared proxy authentication state</td>
+    </tr>
+    <tr>
+      <td>curl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-92392">CVE-2026-92392</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: curl: HTTP/2 upload Use-After-Free</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-31789">CVE-2026-31789</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Heap buffer overflow on 32-bit systems from large X.509 certificate processing</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-15467">CVE-2025-15467</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.6-r0</span></td>
+      <td>openssl: OpenSSL: Remote code execution or Denial of Service via oversized Initialization Vector in CMS parsing</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-69421">CVE-2025-69421</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.6-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service via malformed PKCS#12 file processing</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28387">CVE-2026-28387</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Arbitrary code execution due to use-after-free in DANE TLSA authentication</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28388">CVE-2026-28388</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service due to NULL pointer dereference in delta CRL processing</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28389">CVE-2026-28389</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service vulnerability in CMS processing</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28390">CVE-2026-28390</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service due to NULL pointer dereference in CMS EnvelopedData processing</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-45447">CVE-2026-45447</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r1</span></td>
+      <td>openssl: Heap Use-After-Free in OpenSSL PKCS7_verify()</td>
+    </tr>
+    <tr>
+      <td>libcrypto3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-84782">CVE-2026-84782</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r2</span></td>
+      <td>openssl: compat-openssl: openssl: Information disclosure via DTLS handshake retransmission</td>
+    </tr>
+    <tr>
+      <td>libcurl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-5773">CVE-2026-5773</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: libcurl: Wrong file transfer due to incorrect SMB connection reuse</td>
+    </tr>
+    <tr>
+      <td>libcurl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-6276">CVE-2026-6276</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: libcurl: Information disclosure due to cookie leak when reusing connections with custom Host headers</td>
+    </tr>
+    <tr>
+      <td>libcurl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8286">CVE-2026-8286</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: curl: Insecure connection establishment due to TLS configuration mismatch</td>
+    </tr>
+    <tr>
+      <td>libcurl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8927">CVE-2026-8927</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: Information disclosure due to uncleared proxy authentication state</td>
+    </tr>
+    <tr>
+      <td>libcurl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-92392">CVE-2026-92392</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.12.1-r1</td>
+      <td><span class="ok">8.14.1-r3</span></td>
+      <td>curl: curl: HTTP/2 upload Use-After-Free</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-59375">CVE-2025-59375</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.7.2-r0</span></td>
+      <td>firefox: thunderbird: expat: libexpat in Expat allows attackers to trigger large dynamic memory allocations via a small document that is submitted for parsing</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-25210">CVE-2026-25210</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.7.4-r0</span></td>
+      <td>libexpat: libexpat: Information disclosure and data integrity issues due to integer overflow in buffer reallocation</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-45186">CVE-2026-45186</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.8.1-r0</span></td>
+      <td>libexpat: denial of service via crafted XML input</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-66046">CVE-2026-66046</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.8.4-r0</span></td>
+      <td>expat: Expat: Denial of Service via quadratic complexity in attribute processing</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-76641">CVE-2026-76641</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.8.4-r0</span></td>
+      <td>expat: Expat: Denial of Service via XML external entity parsing</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-76956">CVE-2026-76956</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.8.4-r0</span></td>
+      <td>libexpat: libexpat: Denial of Service via hash flooding attack with crafted XML</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-76957">CVE-2026-76957</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.8.4-r0</span></td>
+      <td>libexpat: libexpat: Memory corruption vulnerability allows arbitrary code execution or denial of service</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-77214">CVE-2026-77214</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.9.0-r0</span></td>
+      <td>expat: expat: Information disclosure via heap buffer over-read in XML_ParseBuffer</td>
+    </tr>
+    <tr>
+      <td>libexpat</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-93990">CVE-2026-93990</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.7.0-r0</td>
+      <td><span class="ok">2.8.5-r0</span></td>
+      <td>expat: Expat: XML Injection via Malformed UTF-16 Input</td>
+    </tr>
+    <tr>
+      <td>libpng</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-64720">CVE-2025-64720</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.6.47-r0</td>
+      <td><span class="ok">1.6.53-r0</span></td>
+      <td>libpng: LIBPNG buffer overflow</td>
+    </tr>
+    <tr>
+      <td>libpng</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-65018">CVE-2025-65018</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.6.47-r0</td>
+      <td><span class="ok">1.6.53-r0</span></td>
+      <td>libpng: LIBPNG heap buffer overflow</td>
+    </tr>
+    <tr>
+      <td>libpng</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-66293">CVE-2025-66293</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.6.47-r0</td>
+      <td><span class="ok">1.6.53-r0</span></td>
+      <td>libpng: LIBPNG out-of-bounds read in png_image_read_composite</td>
+    </tr>
+    <tr>
+      <td>libpng</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-22695">CVE-2026-22695</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.6.47-r0</td>
+      <td><span class="ok">1.6.54-r0</span></td>
+      <td>libpng: libpng: Denial of service and information disclosure via heap buffer over-read in png_image_finish_read</td>
+    </tr>
+    <tr>
+      <td>libpng</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-22801">CVE-2026-22801</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.6.47-r0</td>
+      <td><span class="ok">1.6.54-r0</span></td>
+      <td>libpng: libpng: Information disclosure and denial of service via integer truncation in simplified write API</td>
+    </tr>
+    <tr>
+      <td>libpng</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-25646">CVE-2026-25646</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.6.47-r0</td>
+      <td><span class="ok">1.6.55-r0</span></td>
+      <td>libpng: LIBPNG has a heap buffer overflow in png_set_quantize</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-31789">CVE-2026-31789</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Heap buffer overflow on 32-bit systems from large X.509 certificate processing</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-15467">CVE-2025-15467</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.6-r0</span></td>
+      <td>openssl: OpenSSL: Remote code execution or Denial of Service via oversized Initialization Vector in CMS parsing</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-69421">CVE-2025-69421</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.6-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service via malformed PKCS#12 file processing</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28387">CVE-2026-28387</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Arbitrary code execution due to use-after-free in DANE TLSA authentication</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28388">CVE-2026-28388</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service due to NULL pointer dereference in delta CRL processing</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28389">CVE-2026-28389</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service vulnerability in CMS processing</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-28390">CVE-2026-28390</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r0</span></td>
+      <td>openssl: OpenSSL: Denial of Service due to NULL pointer dereference in CMS EnvelopedData processing</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-45447">CVE-2026-45447</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r1</span></td>
+      <td>openssl: Heap Use-After-Free in OpenSSL PKCS7_verify()</td>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-84782">CVE-2026-84782</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.3.3-r0</td>
+      <td><span class="ok">3.3.7-r2</span></td>
+      <td>openssl: compat-openssl: openssl: Information disclosure via DTLS handshake retransmission</td>
+    </tr>
+    <tr>
+      <td>libxml2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-49794">CVE-2025-49794</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.13.4-r6</td>
+      <td><span class="ok">2.13.9-r0</span></td>
+      <td>libxml: Heap use after free (UAF) leads to Denial of service (DoS)</td>
+    </tr>
+    <tr>
+      <td>libxml2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-49795">CVE-2025-49795</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.13.4-r6</td>
+      <td><span class="ok">2.13.9-r0</span></td>
+      <td>libxml: Null pointer dereference leads to Denial of service (DoS)</td>
+    </tr>
+    <tr>
+      <td>libxml2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-49796">CVE-2025-49796</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.13.4-r6</td>
+      <td><span class="ok">2.13.9-r0</span></td>
+      <td>libxml: Type confusion leads to Denial of service (DoS)</td>
+    </tr>
+    <tr>
+      <td>libxml2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-6732">CVE-2026-6732</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.13.4-r6</td>
+      <td><span class="ok">2.13.9-r1</span></td>
+      <td>libxml2: libxml2: Denial of Service via crafted XSD-validated document</td>
+    </tr>
+    <tr>
+      <td>musl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-40200">CVE-2026-40200</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.2.5-r9</td>
+      <td><span class="ok">1.2.5-r11</span></td>
+      <td>musl: musl libc: Arbitrary code execution and denial of service via stack-based memory corruption in qsort</td>
+    </tr>
+    <tr>
+      <td>musl-utils</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-40200">CVE-2026-40200</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.2.5-r9</td>
+      <td><span class="ok">1.2.5-r11</span></td>
+      <td>musl: musl libc: Arbitrary code execution and denial of service via stack-based memory corruption in qsort</td>
+    </tr>
+    <tr>
+      <td>nghttp2-libs</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-27135">CVE-2026-27135</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.64.0-r0</td>
+      <td><span class="ok">1.68.1</span></td>
+      <td>nghttp2: nghttp2: Denial of Service via malformed HTTP/2 frames after session termination</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-103111">CVE-2026-103111</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.43-r0</td>
+      <td><span class="ok">10.43-r1</span></td>
+      <td>pcre2: pcre2: Out-of-bounds write via crafted regular expression</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-86145">CVE-2026-86145</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.43-r0</td>
+      <td><span class="ok">10.43-r1</span></td>
+      <td>pcre2: PCRE2: Out-of-bounds write allows arbitrary code execution via crafted regular expressions</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89157">CVE-2026-89157</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.43-r0</td>
+      <td><span class="ok">10.43-r1</span></td>
+      <td>pcre2: PCRE2: Out-of-bounds write via large pattern input</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89161">CVE-2026-89161</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.43-r0</td>
+      <td><span class="ok">10.43-r1</span></td>
+      <td>pcre2: PCRE2: Memory corruption vulnerability in pcre2_jit_match</td>
+    </tr>
+    <tr>
+      <td>tiff</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-4775">CVE-2026-4775</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.7.0-r0</td>
+      <td><span class="ok">4.7.2-r0</span></td>
+      <td>libtiff: libtiff: Arbitrary code execution or denial of service via signed integer overflow in TIFF file processing</td>
+    </tr>
+    <tr>
+      <td>zlib</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-22184">CVE-2026-22184</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.3.1-r2</td>
+      <td><span class="ok">1.3.2-r0</span></td>
+      <td>zlib: zlib: Arbitrary code execution via buffer overflow in untgz utility</td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

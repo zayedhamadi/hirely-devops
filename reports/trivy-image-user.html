@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Rapport de sécurité Trivy</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; background: #f5f6f8; color: #222; }
+  h1 { margin-bottom: 4px; }
+  h2 { margin-top: 0; }
+  .box { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th { background: #2c3e50; color: #fff; text-align: left; padding: 8px; }
+  td { padding: 8px; border-bottom: 1px solid #e3e6ea; vertical-align: top; }
+  tr:hover td { background: #fafbfc; }
+  .sev { padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: bold; font-size: 12px; }
+  .CRITICAL { background: #c0392b; }
+  .HIGH { background: #e67e22; }
+  .MEDIUM { background: #f1c40f; color: #222; }
+  .LOW { background: #3498db; }
+  .UNKNOWN { background: #7f8c8d; }
+  .ok { color: #1e8449; font-weight: bold; }
+  .nofix { color: #c0392b; font-weight: bold; }
+  code { background: #eef0f3; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Rapport de sécurité Trivy</h1>
+
+<div class="box">
+  <h2>Service : __SERVICE__</h2>
+  <p>Image : <code>__IMAGE__</code></p>
+  <p>Build Jenkins n°__BUILD__ - généré le __DATE__</p>
+  <p>Seules les failles <b>HIGH</b> et <b>CRITICAL</b> avec un correctif disponible sont listées.
+     Si aucun tableau n'apparaît plus bas, aucune faille de ce type n'a été trouvée.</p>
+</div>
+
+<div class="box">
+  <h2>Comment lire ce rapport</h2>
+  <table>
+    <tr><th>Colonne</th><th>Signification</th></tr>
+    <tr><td>Bibliothèque</td><td>Le composant concerné : un fichier <code>.jar</code> Java ou un paquet du système.</td></tr>
+    <tr><td>CVE</td><td>Numéro officiel de la faille. Clique dessus pour lire le détail.</td></tr>
+    <tr><td>Gravité</td><td><span class="sev CRITICAL">CRITICAL</span> bloque le pipeline.
+        <span class="sev HIGH">HIGH</span> est à corriger bientôt mais ne bloque pas.</td></tr>
+    <tr><td>Version installée</td><td>La version utilisée actuellement dans ton image.</td></tr>
+    <tr><td>Version corrigée</td><td>La version qui contient le correctif. Il suffit de passer à cette version (ou plus récente).</td></tr>
+    <tr><td>Description</td><td>Résumé du risque en une phrase.</td></tr>
+  </table>
+</div>
+<div class="box">
+  <h2>ghcr.io/zayedhamadi/user-service:1.0.0 (ubuntu 22.04)</h2>
+  <p>2 faille(s) détectée(s)</p>
+  <table>
+    <tr>
+      <th>Bibliothèque</th>
+      <th>CVE</th>
+      <th>Gravité</th>
+      <th>Version installée</th>
+      <th>Version corrigée</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>libssl3</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-84782">CVE-2026-84782</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.0.2-0ubuntu1.29</td>
+      <td><span class="ok">3.0.2-0ubuntu1.30</span></td>
+      <td>openssl: compat-openssl: openssl: Information disclosure via DTLS handshake retransmission</td>
+    </tr>
+    <tr>
+      <td>openssl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-84782">CVE-2026-84782</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.0.2-0ubuntu1.29</td>
+      <td><span class="ok">3.0.2-0ubuntu1.30</span></td>
+      <td>openssl: compat-openssl: openssl: Information disclosure via DTLS handshake retransmission</td>
+    </tr>
+  </table>
+</div>
+<div class="box">
+  <h2>Java</h2>
+  <p>14 faille(s) détectée(s)</p>
+  <table>
+    <tr>
+      <th>Bibliothèque</th>
+      <th>CVE</th>
+      <th>Gravité</th>
+      <th>Version installée</th>
+      <th>Version corrigée</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89407">CVE-2026-89407</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.21.4</td>
+      <td><span class="ok">2.18.11, 2.21.7, 2.22.3</span></td>
+      <td>com.fasterxml.jackson/jackson-core: tools.jackson.core/jackson-core: Jackson-core: Denial of Service via regular expression backtracking</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89425">CVE-2026-89425</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.21.4</td>
+      <td><span class="ok">2.21.7, 2.22.3, 2.18.11</span></td>
+      <td>com.fasterxml.jackson.core/jackson-core: Jackson-core: Denial of Service via unbounded StringBuilder growth during malformed token processing</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68497">CVE-2026-68497</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.21.4</td>
+      <td><span class="ok">2.18.10, 2.21.6, 2.22.2</span></td>
+      <td>com.fasterxml.jackson.core/jackson-databind: tools.jackson.core/jackson-databind: jackson-databind: CPU Denial of Service via unbounded numeric parsing</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91776">CVE-2026-91776</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.21.4</td>
+      <td><span class="ok">2.18.11, 2.21.7, 2.22.3</span></td>
+      <td>jackson-databind: com.fasterxml.jackson/jackson-core: jackson-databind: Denial of Service via unbounded cache growth in TypeDeserializerBase</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91777">CVE-2026-91777</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.21.4</td>
+      <td><span class="ok">2.21.7, 2.18.11, 2.22.3</span></td>
+      <td>com.fasterxml.jackson.core/jackson-databind: tools.jackson.core:jackson-databind: Jackson-databind: Denial of Service via quadratic forward-reference completion</td>
+    </tr>
+    <tr>
+      <td>org.apache.httpcomponents.core5:httpcore5</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54399">CVE-2026-54399</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>5.3.6</td>
+      <td><span class="ok">5.4.3, 5.5-beta2</span></td>
+      <td>org.apache.httpcomponents.core5/httpcore5: Apache HttpComponents Core: Denial of Service via excessive HTTP headers</td>
+    </tr>
+    <tr>
+      <td>org.apache.httpcomponents.core5:httpcore5-h2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54428">CVE-2026-54428</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>5.3.6</td>
+      <td><span class="ok">5.4.3, 5.5-beta2</span></td>
+      <td>org.apache.httpcomponents.core5/httpcore5-h2: Apache HttpComponents Core: Denial of Service via oversized HTTP/2 HPACK header blocks</td>
+    </tr>
+    <tr>
+      <td>org.apache.tomcat.embed:tomcat-embed-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-65182">CVE-2026-65182</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>10.1.55</td>
+      <td><span class="ok">11.0.25, 10.1.58, 9.0.121</span></td>
+      <td>tomcat: Apache Tomcat: Security constraint bypass due to improper access control</td>
+    </tr>
+    <tr>
+      <td>org.apache.tomcat.embed:tomcat-embed-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-65905">CVE-2026-65905</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>10.1.55</td>
+      <td><span class="ok">11.0.25, 10.1.58, 9.0.121</span></td>
+      <td>tomcat: Apache Tomcat: Authentication bypass via limited replay attack in DIGEST authenticator</td>
+    </tr>
+    <tr>
+      <td>org.apache.tomcat.embed:tomcat-embed-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68525">CVE-2026-68525</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>10.1.55</td>
+      <td><span class="ok">11.0.25, 10.1.58, 9.0.121</span></td>
+      <td>tomcat: Apache Tomcat: Unauthorized resource access via FORM authentication bypass</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8763">CVE-2026-8763</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>1.80.2</td>
+      <td><span class="ok">1.85</span></td>
+      <td>org.bouncycastle/bcprov-jdk15on: org.bouncycastle/bcpkix-jdk15on: Bouncy Castle for Java: Name Constraints bypass via trailing dot in rfc822Name and URI</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-13506">CVE-2026-13506</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.80.2</td>
+      <td><span class="ok">1.85</span></td>
+      <td>bouncycastle: Bouncy Castle for Java: Denial of Service via lazy ASN.1 sequence processing</td>
+    </tr>
+    <tr>
+      <td>org.springframework:spring-webmvc</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-47884">CVE-2026-47884</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>6.2.19</td>
+      <td><span class="ok">7.0.9</span></td>
+      <td>org.springframework/spring-webmvc: Spring Framework: Remote Code Execution via improper path limitation in XsltView</td>
+    </tr>
+    <tr>
+      <td>org.springframework:spring-webmvc</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-47890">CVE-2026-47890</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>6.2.19</td>
+      <td><span class="ok">7.0.9</span></td>
+      <td>org.springframework/spring-webmvc: org.springframework/spring-webflux: Spring Framework: Stream corruption in Server-Sent Events (SSE) with view fragments</td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

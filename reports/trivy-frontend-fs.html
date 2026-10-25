@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Rapport de sécurité Trivy</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; background: #f5f6f8; color: #222; }
+  h1 { margin-bottom: 4px; }
+  h2 { margin-top: 0; }
+  .box { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th { background: #2c3e50; color: #fff; text-align: left; padding: 8px; }
+  td { padding: 8px; border-bottom: 1px solid #e3e6ea; vertical-align: top; }
+  tr:hover td { background: #fafbfc; }
+  .sev { padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: bold; font-size: 12px; }
+  .CRITICAL { background: #c0392b; }
+  .HIGH { background: #e67e22; }
+  .MEDIUM { background: #f1c40f; color: #222; }
+  .LOW { background: #3498db; }
+  .UNKNOWN { background: #7f8c8d; }
+  .ok { color: #1e8449; font-weight: bold; }
+  .nofix { color: #c0392b; font-weight: bold; }
+  code { background: #eef0f3; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Rapport de sécurité Trivy</h1>
+
+<div class="box">
+  <h2>Service : __SERVICE__</h2>
+  <p>Image : <code>__IMAGE__</code></p>
+  <p>Build Jenkins n°__BUILD__ - généré le __DATE__</p>
+  <p>Seules les failles <b>HIGH</b> et <b>CRITICAL</b> avec un correctif disponible sont listées.
+     Si aucun tableau n'apparaît plus bas, aucune faille de ce type n'a été trouvée.</p>
+</div>
+
+<div class="box">
+  <h2>Comment lire ce rapport</h2>
+  <table>
+    <tr><th>Colonne</th><th>Signification</th></tr>
+    <tr><td>Bibliothèque</td><td>Le composant concerné : un fichier <code>.jar</code> Java ou un paquet du système.</td></tr>
+    <tr><td>CVE</td><td>Numéro officiel de la faille. Clique dessus pour lire le détail.</td></tr>
+    <tr><td>Gravité</td><td><span class="sev CRITICAL">CRITICAL</span> bloque le pipeline.
+        <span class="sev HIGH">HIGH</span> est à corriger bientôt mais ne bloque pas.</td></tr>
+    <tr><td>Version installée</td><td>La version utilisée actuellement dans ton image.</td></tr>
+    <tr><td>Version corrigée</td><td>La version qui contient le correctif. Il suffit de passer à cette version (ou plus récente).</td></tr>
+    <tr><td>Description</td><td>Résumé du risque en une phrase.</td></tr>
+  </table>
+</div>
+<div class="box">
+  <h2>package-lock.json</h2>
+  <p>32 faille(s) détectée(s)</p>
+  <table>
+    <tr>
+      <th>Bibliothèque</th>
+      <th>CVE</th>
+      <th>Gravité</th>
+      <th>Version installée</th>
+      <th>Version corrigée</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>@angular/common</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-66035">CVE-2025-66035</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">21.0.1, 20.3.14, 19.2.16</span></td>
+      <td>angular: Angular HTTP Client Has XSRF Token Leakage via Protocol-Relative URLs</td>
+    </tr>
+    <tr>
+      <td>@angular/common</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50170">CVE-2026-50170</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-rc.2, 20.3.22, 19.2.23, 21.2.15</span></td>
+      <td>@angular/common: Information Leak via Default Caching of Credentialed Requests in HttpTransferCache</td>
+    </tr>
+    <tr>
+      <td>@angular/common</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50171">CVE-2026-50171</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-rc.2, 20.3.22, 19.2.23, 21.2.15</span></td>
+      <td>@angular/common: Angular @angular/common: Denial of Service via malformed digitsInfo parameter</td>
+    </tr>
+    <tr>
+      <td>@angular/common</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54266">CVE-2026-54266</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.1, 21.2.17, 20.3.25</span></td>
+      <td>@angular/common: Weak 32-Bit Cache Key Hashing in `HttpTransferCache` Leading to Cross-Request Data Leakage and State Poisoning</td>
+    </tr>
+    <tr>
+      <td>@angular/common</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54268">CVE-2026-54268</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.1, 21.2.17, 20.3.25</span></td>
+      <td>@angular/common: Angular @angular/common: Denial of Service via crafted date format string</td>
+    </tr>
+    <tr>
+      <td>@angular/common</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68945">CVE-2026-68945</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.2, 21.2.19, 20.3.27</span></td>
+      <td>@angular/common: Angular: Cross-Request Response Reuse and State Poisoning in HttpTransferCache</td>
+    </tr>
+    <tr>
+      <td>@angular/compiler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-66412">CVE-2025-66412</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">21.0.2, 20.3.15, 19.2.17</span></td>
+      <td>angular: Angular Stored XSS Vulnerability via SVG Animation, SVG URL and MathML Attributes</td>
+    </tr>
+    <tr>
+      <td>@angular/compiler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-22610">CVE-2026-22610</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">21.1.0-rc.0, 21.0.7, 20.3.16, 19.2.18</span></td>
+      <td>angular: Angular: Cross-site scripting vulnerability in Template Compiler</td>
+    </tr>
+    <tr>
+      <td>@angular/compiler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-32635">CVE-2026-32635</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-next.3, 21.2.4, 20.3.18, 19.2.20</span></td>
+      <td>@angular/core: @angular/compiler: Angular has XSS in i18n attribute bindings</td>
+    </tr>
+    <tr>
+      <td>@angular/compiler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-69151">CVE-2026-69151</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.1, 21.2.19, 20.3.27</span></td>
+      <td>@angular/compiler: @angular/core: Angular: Cross-Site Scripting via internationalization event handlers</td>
+    </tr>
+    <tr>
+      <td>@angular/core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-22610">CVE-2026-22610</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">21.1.0-rc.0, 21.0.7, 20.3.16, 19.2.18</span></td>
+      <td>angular: Angular: Cross-site scripting vulnerability in Template Compiler</td>
+    </tr>
+    <tr>
+      <td>@angular/core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-27970">CVE-2026-27970</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">21.2.0, 21.1.6, 20.3.17, 19.2.19</span></td>
+      <td>@angular/core: Angular: Cross-site scripting via compromised translation files</td>
+    </tr>
+    <tr>
+      <td>@angular/core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-32635">CVE-2026-32635</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-next.3, 21.2.4, 20.3.18, 19.2.20</span></td>
+      <td>@angular/core: @angular/compiler: Angular has XSS in i18n attribute bindings</td>
+    </tr>
+    <tr>
+      <td>@angular/core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54267">CVE-2026-54267</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.1, 21.2.17, 20.3.25</span></td>
+      <td>@angular/core: Angular Client Hydration DOM Clobbering &amp; Response-Cache Poisoning</td>
+    </tr>
+    <tr>
+      <td>@angular/core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-69151">CVE-2026-69151</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.1, 21.2.19, 20.3.27</span></td>
+      <td>@angular/compiler: @angular/core: Angular: Cross-Site Scripting via internationalization event handlers</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-101895">CVE-2026-101895</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.1.6, 21.2.23, 20.3.31</span></td>
+      <td>Angular is a development platform for building mobile and desktop web  ...</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-41423">CVE-2026-41423</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-next.8, 21.2.9, 20.3.19, 19.2.21</span></td>
+      <td>Angular: SSRF via protocol-relative and backslash URLs in Angular Platform-Server</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-46417">CVE-2026-46417</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-next.12, 21.2.13, 20.3.21, 19.2.22</span></td>
+      <td>@angular/platform-server: Angular: SSRF via Hostname Hijacking in @angular/platform-server</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50168">CVE-2026-50168</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-rc.2, 20.3.22, 19.2.23, 21.2.15</span></td>
+      <td>@angular/platform-server: Angular @angular/platform-server: Server-Side Request Forgery (SSRF) via malformed URL parsing</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50555">CVE-2026-50555</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-rc.2, 21.2.16, 20.3.24, 19.2.25</span></td>
+      <td>@angular/platform-server: Improper Neutralization of Input During Web Page Generation (&#39;Cross-site Scripting&#39;)</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50556">CVE-2026-50556</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.0-rc.2, 21.2.16, 20.3.24, 19.2.25</span></td>
+      <td>@angular/platform-server: domino: Angular Platform Server: Cross-Site Scripting via unescaped `&lt;/noscript&gt;` tags in dynamic content</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-69149">CVE-2026-69149</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.0.7, 21.2.19, 20.3.27</span></td>
+      <td>Angular is a development platform for building mobile and desktop web  ...</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-88056">CVE-2026-88056</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.1.4, 21.2.22, 20.3.30</span></td>
+      <td>Angular is a development platform for building mobile and desktop web  ...</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-88058">CVE-2026-88058</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.1.4, 21.2.22, 20.3.30</span></td>
+      <td>Angular is a development platform for building mobile and desktop web  ...</td>
+    </tr>
+    <tr>
+      <td>@angular/platform-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-88060">CVE-2026-88060</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.1.4, 21.2.22, 20.3.30</span></td>
+      <td>Angular is a development platform for building mobile and desktop web  ...</td>
+    </tr>
+    <tr>
+      <td>@angular/router</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-101896">CVE-2026-101896</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.2.0, 21.2.24, 20.3.32</span></td>
+      <td>Angular is a development platform for building mobile and desktop web  ...</td>
+    </tr>
+    <tr>
+      <td>@angular/router</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-111752">CVE-2026-111752</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>18.2.14</td>
+      <td><span class="ok">22.2.1, 21.2.25, 20.3.33</span></td>
+      <td>@angular/router: Denial of Service via Unmatched Empty-Path Outlet Route Matching in Server-Side Rendering (SSR)</td>
+    </tr>
+    <tr>
+      <td>@angular/ssr</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-27739">CVE-2026-27739</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>18.2.21</td>
+      <td><span class="ok">21.2.0-rc.1, 21.1.5, 20.3.17, 19.2.21</span></td>
+      <td>Angular SSR is vulnerable to SSRF and Header Injection via request handling pipeline</td>
+    </tr>
+    <tr>
+      <td>body-parser</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-111181">CVE-2026-111181</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.20.6</td>
+      <td><span class="ok">2.4.0, 1.20.9</span></td>
+      <td>body-parser: body-parser: Denial of Service via unhandled decompression stream error</td>
+    </tr>
+    <tr>
+      <td>postcss</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-45623">CVE-2026-45623</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.4.41</td>
+      <td><span class="ok">8.5.12</span></td>
+      <td>postcss: PostCSS: Information disclosure and denial of service via crafted CSS input</td>
+    </tr>
+    <tr>
+      <td>postcss</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-73646">CVE-2026-73646</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>8.4.41</td>
+      <td><span class="ok">8.5.18</span></td>
+      <td>postcss: PostCSS: Information disclosure via path traversal in source map auto-loading</td>
+    </tr>
+    <tr>
+      <td>source-map-js</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-93749">CVE-2026-93749</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.2.1</td>
+      <td><span class="ok">1.2.2</span></td>
+      <td>source-map-js: source-map-js: Denial of Service via malformed indexed source maps</td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

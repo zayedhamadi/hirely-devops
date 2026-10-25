@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Rapport de sécurité Trivy</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; background: #f5f6f8; color: #222; }
+  h1 { margin-bottom: 4px; }
+  h2 { margin-top: 0; }
+  .box { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th { background: #2c3e50; color: #fff; text-align: left; padding: 8px; }
+  td { padding: 8px; border-bottom: 1px solid #e3e6ea; vertical-align: top; }
+  tr:hover td { background: #fafbfc; }
+  .sev { padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: bold; font-size: 12px; }
+  .CRITICAL { background: #c0392b; }
+  .HIGH { background: #e67e22; }
+  .MEDIUM { background: #f1c40f; color: #222; }
+  .LOW { background: #3498db; }
+  .UNKNOWN { background: #7f8c8d; }
+  .ok { color: #1e8449; font-weight: bold; }
+  .nofix { color: #c0392b; font-weight: bold; }
+  code { background: #eef0f3; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Rapport de sécurité Trivy</h1>
+
+<div class="box">
+  <h2>Service : __SERVICE__</h2>
+  <p>Image : <code>__IMAGE__</code></p>
+  <p>Build Jenkins n°__BUILD__ - généré le __DATE__</p>
+  <p>Seules les failles <b>HIGH</b> et <b>CRITICAL</b> avec un correctif disponible sont listées.
+     Si aucun tableau n'apparaît plus bas, aucune faille de ce type n'a été trouvée.</p>
+</div>
+
+<div class="box">
+  <h2>Comment lire ce rapport</h2>
+  <table>
+    <tr><th>Colonne</th><th>Signification</th></tr>
+    <tr><td>Bibliothèque</td><td>Le composant concerné : un fichier <code>.jar</code> Java ou un paquet du système.</td></tr>
+    <tr><td>CVE</td><td>Numéro officiel de la faille. Clique dessus pour lire le détail.</td></tr>
+    <tr><td>Gravité</td><td><span class="sev CRITICAL">CRITICAL</span> bloque le pipeline.
+        <span class="sev HIGH">HIGH</span> est à corriger bientôt mais ne bloque pas.</td></tr>
+    <tr><td>Version installée</td><td>La version utilisée actuellement dans ton image.</td></tr>
+    <tr><td>Version corrigée</td><td>La version qui contient le correctif. Il suffit de passer à cette version (ou plus récente).</td></tr>
+    <tr><td>Description</td><td>Résumé du risque en une phrase.</td></tr>
+  </table>
+</div>
+<div class="box">
+  <h2>quay.io/keycloak/keycloak:26.0.5 (redhat 9.4)</h2>
+  <p>24 faille(s) détectée(s)</p>
+  <table>
+    <tr>
+      <th>Bibliothèque</th>
+      <th>CVE</th>
+      <th>Gravité</th>
+      <th>Version installée</th>
+      <th>Version corrigée</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>ca-certificates</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-114406">CVE-2026-114406</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>2024.2.69_v8.0.303-91.4.el9_4</td>
+      <td><span class="ok">2026.2.92_v9.0.319-90.3.el9_8</span></td>
+      <td>ca-certificates: Distrust eMudhra intermediate CA certificates due to security concerns</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-30749">CVE-2025-30749</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.8.0.9-1.el9</span></td>
+      <td>openjdk: Better Glyph drawing (Oracle CPU 2025-07)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-50059">CVE-2025-50059</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.8.0.9-1.el9</span></td>
+      <td>openjdk: Improve HTTP client header handling (Oracle CPU 2025-07)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-50106">CVE-2025-50106</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.8.0.9-1.el9</span></td>
+      <td>openjdk: Glyph out-of-memory access and crash (Oracle CPU 2025-07)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-64720">CVE-2025-64720</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.10.0.7-1.el9</span></td>
+      <td>libpng: LIBPNG buffer overflow</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-65018">CVE-2025-65018</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.10.0.7-1.el9</span></td>
+      <td>libpng: LIBPNG heap buffer overflow</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-21945">CVE-2026-21945</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.10.0.7-1.el9</span></td>
+      <td>openjdk: Enhance Certificate Checking (Oracle CPU 2026-01)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-22016">CVE-2026-22016</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.11.0.10-2.el9</span></td>
+      <td>openjdk: Enhance Path Factories Redux (Oracle CPU 2026-04)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-26740">CVE-2026-26740</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.11.0.10-2.el9</span></td>
+      <td>giflib: giflib: Denial of Service via buffer overflow in EGifGCBToExtension</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-34282">CVE-2026-34282</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.11.0.10-2.el9</span></td>
+      <td>openjdk: Enhance TLS connection handling (Oracle CPU 2026-04)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-47063">CVE-2026-47063</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="ok">1:21.0.12.0.8-1.2.el9</span></td>
+      <td>openjdk: Enhance Jar handling (Oracle CPU 2026-07)</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91403">CVE-2026-91403</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="nofix">Pas de correctif</span></td>
+      <td>OpenJDK: Distrust eMudhra intermediate CA certificates due to security concerns</td>
+    </tr>
+    <tr>
+      <td>java-21-openjdk-headless</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91415">CVE-2026-91415</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1:21.0.5.0.10-3.el9</td>
+      <td><span class="nofix">Pas de correctif</span></td>
+      <td>openjdk: Enhance font rendering (Oracle CPU 2026-10)</td>
+    </tr>
+    <tr>
+      <td>libacl</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54369">CVE-2026-54369</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.3.1-4.el9</td>
+      <td><span class="ok">2.4.0-1.el9_8</span></td>
+      <td>acl: Symlink traversal privilege escalation via libacl functions</td>
+    </tr>
+    <tr>
+      <td>libcap</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-4878">CVE-2026-4878</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.48-9.el9_2</td>
+      <td><span class="ok">2.48-10.el9_8.1</span></td>
+      <td>libcap: libcap: Privilege escalation via TOCTOU race condition in cap_set_file()</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-103111">CVE-2026-103111</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.40-5.el9</td>
+      <td><span class="ok">10.40-7.el9_8</span></td>
+      <td>pcre2: pcre2: Out-of-bounds write via crafted regular expression</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-86145">CVE-2026-86145</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.40-5.el9</td>
+      <td><span class="ok">10.40-7.el9_8</span></td>
+      <td>pcre2: PCRE2: Out-of-bounds write allows arbitrary code execution via crafted regular expressions</td>
+    </tr>
+    <tr>
+      <td>pcre2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89161">CVE-2026-89161</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.40-5.el9</td>
+      <td><span class="ok">10.40-7.el9_8</span></td>
+      <td>pcre2: PCRE2: Memory corruption vulnerability in pcre2_jit_match</td>
+    </tr>
+    <tr>
+      <td>pcre2-syntax</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-103111">CVE-2026-103111</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.40-5.el9</td>
+      <td><span class="ok">10.40-7.el9_8</span></td>
+      <td>pcre2: pcre2: Out-of-bounds write via crafted regular expression</td>
+    </tr>
+    <tr>
+      <td>pcre2-syntax</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-86145">CVE-2026-86145</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.40-5.el9</td>
+      <td><span class="ok">10.40-7.el9_8</span></td>
+      <td>pcre2: PCRE2: Out-of-bounds write allows arbitrary code execution via crafted regular expressions</td>
+    </tr>
+    <tr>
+      <td>pcre2-syntax</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89161">CVE-2026-89161</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>10.40-5.el9</td>
+      <td><span class="ok">10.40-7.el9_8</span></td>
+      <td>pcre2: PCRE2: Memory corruption vulnerability in pcre2_jit_match</td>
+    </tr>
+    <tr>
+      <td>sqlite-libs</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-6965">CVE-2025-6965</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.34.1-7.el9_3</td>
+      <td><span class="ok">3.34.1-9.el9_7</span></td>
+      <td>sqlite: Integer Truncation in SQLite</td>
+    </tr>
+    <tr>
+      <td>sqlite-libs</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-11822">CVE-2026-11822</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.34.1-7.el9_3</td>
+      <td><span class="ok">3.34.1-11.el9_8</span></td>
+      <td>sqlite: SQLite: Arbitrary code execution via crafted FTS5 full-text search data</td>
+    </tr>
+    <tr>
+      <td>sqlite-libs</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-11824">CVE-2026-11824</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.34.1-7.el9_3</td>
+      <td><span class="ok">3.34.1-11.el9_8</span></td>
+      <td>sqlite: SQLite: Arbitrary code execution and crash via heap-based buffer overflow in FTS5</td>
+    </tr>
+  </table>
+</div>
+<div class="box">
+  <h2>Java</h2>
+  <p>78 faille(s) détectée(s)</p>
+  <table>
+    <tr>
+      <th>Bibliothèque</th>
+      <th>CVE</th>
+      <th>Gravité</th>
+      <th>Version installée</th>
+      <th>Version corrigée</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68494">CVE-2026-68494</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.8, 2.21.4</span></td>
+      <td>com.fasterxml.jackson.core/jackson-core: tools.jackson.core/jackson-core: jackson-core: Denial of Service via incomplete fix in async JSON parser</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68494">CVE-2026-68494</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.8, 2.21.4</span></td>
+      <td>com.fasterxml.jackson.core/jackson-core: tools.jackson.core/jackson-core: jackson-core: Denial of Service via incomplete fix in async JSON parser</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89407">CVE-2026-89407</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.11, 2.21.7, 2.22.3</span></td>
+      <td>com.fasterxml.jackson/jackson-core: tools.jackson.core/jackson-core: Jackson-core: Denial of Service via regular expression backtracking</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89407">CVE-2026-89407</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.11, 2.21.7, 2.22.3</span></td>
+      <td>com.fasterxml.jackson/jackson-core: tools.jackson.core/jackson-core: Jackson-core: Denial of Service via regular expression backtracking</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89425">CVE-2026-89425</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.21.7, 2.22.3, 2.18.11</span></td>
+      <td>com.fasterxml.jackson.core/jackson-core: Jackson-core: Denial of Service via unbounded StringBuilder growth during malformed token processing</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-89425">CVE-2026-89425</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.21.7, 2.22.3, 2.18.11</span></td>
+      <td>com.fasterxml.jackson.core/jackson-core: Jackson-core: Denial of Service via unbounded StringBuilder growth during malformed token processing</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54512">CVE-2026-54512</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.8, 3.1.4, 2.21.4</span></td>
+      <td>jackson-databind: jackson-databind: Arbitrary code execution via PolymorphicTypeValidator bypass</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54512">CVE-2026-54512</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.8, 3.1.4, 2.21.4</span></td>
+      <td>jackson-databind: jackson-databind: Arbitrary code execution via PolymorphicTypeValidator bypass</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54513">CVE-2026-54513</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.8, 2.21.4, 3.1.4</span></td>
+      <td>jackson-databind: Jackson-databind: Security bypass allows arbitrary code execution</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54513">CVE-2026-54513</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.8, 2.21.4, 3.1.4</span></td>
+      <td>jackson-databind: Jackson-databind: Security bypass allows arbitrary code execution</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68497">CVE-2026-68497</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.10, 2.21.6, 2.22.2</span></td>
+      <td>com.fasterxml.jackson.core/jackson-databind: tools.jackson.core/jackson-databind: jackson-databind: CPU Denial of Service via unbounded numeric parsing</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-68497">CVE-2026-68497</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.10, 2.21.6, 2.22.2</span></td>
+      <td>com.fasterxml.jackson.core/jackson-databind: tools.jackson.core/jackson-databind: jackson-databind: CPU Denial of Service via unbounded numeric parsing</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91776">CVE-2026-91776</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.11, 2.21.7, 2.22.3</span></td>
+      <td>jackson-databind: com.fasterxml.jackson/jackson-core: jackson-databind: Denial of Service via unbounded cache growth in TypeDeserializerBase</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91776">CVE-2026-91776</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.18.11, 2.21.7, 2.22.3</span></td>
+      <td>jackson-databind: com.fasterxml.jackson/jackson-core: jackson-databind: Denial of Service via unbounded cache growth in TypeDeserializerBase</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91777">CVE-2026-91777</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.21.7, 2.18.11, 2.22.3</span></td>
+      <td>com.fasterxml.jackson.core/jackson-databind: tools.jackson.core:jackson-databind: Jackson-databind: Denial of Service via quadratic forward-reference completion</td>
+    </tr>
+    <tr>
+      <td>com.fasterxml.jackson.core:jackson-databind</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-91777">CVE-2026-91777</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>2.17.2</td>
+      <td><span class="ok">2.21.7, 2.18.11, 2.22.3</span></td>
+      <td>com.fasterxml.jackson.core/jackson-databind: tools.jackson.core:jackson-databind: Jackson-databind: Denial of Service via quadratic forward-reference completion</td>
+    </tr>
+    <tr>
+      <td>com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-66021">CVE-2025-66021</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>20240325.1</td>
+      <td><span class="ok">20260101.1</span></td>
+      <td>com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer: OWASP Java HTML Sanitizer vulnerable to XSS</td>
+    </tr>
+    <tr>
+      <td>com.microsoft.sqlserver:mssql-jdbc</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-59250">CVE-2025-59250</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>12.8.1</td>
+      <td><span class="ok">10.2.4.jre11, 11.2.4.jre11, 12.2.1.jre11, 12.6.5.jre11, 12.8.2.jre11, 12.10.2.jre11, 13.2.1.jre11</span></td>
+      <td>JDBC Driver for SQL Server has improper input validation issue</td>
+    </tr>
+    <tr>
+      <td>com.microsoft.sqlserver:mssql-jdbc</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-59250">CVE-2025-59250</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>12.8.1.jre11</td>
+      <td><span class="ok">10.2.4.jre11, 11.2.4.jre11, 12.2.1.jre11, 12.6.5.jre11, 12.8.2.jre11, 12.10.2.jre11, 13.2.1.jre11</span></td>
+      <td>JDBC Driver for SQL Server has improper input validation issue</td>
+    </tr>
+    <tr>
+      <td>io.micrometer:micrometer-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-40984">CVE-2026-40984</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.13.5</td>
+      <td><span class="ok">1.16.6, 1.15.12</span></td>
+      <td>micrometer-core: micrometer-jetty11: micrometer-jetty12: Micrometer: Denial of Service via specially crafted HTTP requests</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-42583">CVE-2026-42583</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.1.133.Final</span></td>
+      <td>netty: io.netty/netty-codec-compression: io.netty/netty-codec: Netty: Denial of Service via excessive memory allocation in LZ4FrameDecoder</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-59901">CVE-2026-59901</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.1.136.Final</span></td>
+      <td>io.netty/netty-codec-compression: Netty: Infinite loop in netty-codec-compression (bzip2)</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-dns</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-42579">CVE-2026-42579</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.13.Final, 4.1.133.Final</span></td>
+      <td>netty: Netty: High integrity impact due to improper DNS domain name constraint enforcement</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-haproxy</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-44893">CVE-2026-44893</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>netty-codec-haproxy: Netty-codec-haproxy: Denial of Service via malformed HAProxy message</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-haproxy</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-48059">CVE-2026-48059</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>netty-codec-haproxy: Netty HAProxy PROXY protocol v2 codec: Denial of Service via memory leak from crafted PROXY protocol headers</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-haproxy</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-55851">CVE-2026-55851</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.16.Final, 4.1.136.Final</span></td>
+      <td>io.netty/netty-codec-haproxy: Netty codec-haproxy: Denial of Service via crafted PROXY protocol v2 message</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-33870">CVE-2026-33870</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.1.132.Final, 4.2.10.Final</span></td>
+      <td>io.netty/netty-codec-http: Netty: Request smuggling via incorrect parsing of HTTP/1.1 chunked transfer encoding extension values</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-42584">CVE-2026-42584</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.13.Final, 4.1.133.Final</span></td>
+      <td>netty: io.netty/netty-codec-http: Netty: Incorrect HTTP response parsing leads to data confusion</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-42587">CVE-2026-42587</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.13.Final, 4.1.133.Final</span></td>
+      <td>netty: io.netty/netty-codec-http: io.netty/netty-codec-http2: Netty: Denial of Service via unbounded memory allocation in HTTP content decompression</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-55831">CVE-2026-55831</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.16.Final, 4.1.136.Final</span></td>
+      <td>io.netty/netty-codec-http: Netty: Denial of Service via SPDY SETTINGS frame processing</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-55833">CVE-2026-55833</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.16.Final, 4.1.136.Final</span></td>
+      <td>netty: io.netty/netty-codec-http: Netty: Denial of Service via SPDY header decompression amplification</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-56745">CVE-2026-56745</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.16.Final, 4.1.136.Final</span></td>
+      <td>netty: io.netty/netty-codec-http: Netty: Denial of Service via memory exhaustion in SPDY-to-HTTP codec</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-55163">CVE-2025-55163</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.4.Final, 4.1.124.Final</span></td>
+      <td>netty: netty-codec-http2: Netty MadeYouReset HTTP/2 DDoS Vulnerability</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-33871">CVE-2026-33871</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.1.132.Final, 4.2.11.Final</span></td>
+      <td>netty: Netty: Denial of Service via HTTP/2 CONTINUATION frame flood</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-42587">CVE-2026-42587</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.13.Final, 4.1.133.Final</span></td>
+      <td>netty: io.netty/netty-codec-http: io.netty/netty-codec-http2: Netty: Denial of Service via unbounded memory allocation in HTTP content decompression</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-codec-http2</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-56819">CVE-2026-56819</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.16.Final, 4.1.136.Final</span></td>
+      <td>io.netty/netty-codec-http2: Netty: Denial of Service via HTTP/2 DATA frame memory leak</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-handler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-75595">CVE-2026-75595</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.17.Final, 4.1.137.Final</span></td>
+      <td>io.netty/netty-handler: Netty: SNI Routing Bypass via Fragmented TLS ClientHello Causing Fallback to Default SslContext</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-handler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-24970">CVE-2025-24970</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.1.118.Final</span></td>
+      <td>io.netty:netty-handler: SslHandler doesn&#39;t correctly validate packets which can lead to native crash when using native SSLEngine</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-handler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-44249">CVE-2026-44249</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>netty-handler: netty-handler: IPv6 subnet rule bypass due to incorrect masking operation</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-handler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-45416">CVE-2026-45416</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>netty-handler: Netty: Denial of Service due to eager buffer allocation in TLS handshake</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-handler</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50010">CVE-2026-50010</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>netty-handler: Netty: Improper trust manager handling leads to hostname verification bypass</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-resolver-dns</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-45674">CVE-2026-45674</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>netty-resolver-dns: Netty: Information disclosure and data manipulation due to improper CNAME record validation</td>
+    </tr>
+    <tr>
+      <td>io.netty:netty-resolver-dns</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-47691">CVE-2026-47691</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>4.1.111.Final</td>
+      <td><span class="ok">4.2.15.Final, 4.1.135.Final</span></td>
+      <td>io.netty/netty-resolver-dns: Netty has Insufficient Bailiwick Validation for NS Records</td>
+    </tr>
+    <tr>
+      <td>io.quarkus.http:quarkus-http-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2024-12397">CVE-2024-12397</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>5.3.2</td>
+      <td><span class="ok">5.3.4</span></td>
+      <td>io.quarkus.http/quarkus-http-core: Quarkus HTTP Cookie Smuggling</td>
+    </tr>
+    <tr>
+      <td>io.quarkus:quarkus-rest</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-1247">CVE-2025-1247</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.15.1</td>
+      <td><span class="ok">3.18.2, 3.15.3.1, 3.8.6.1</span></td>
+      <td>io.quarkus:quarkus-rest: Quarkus REST Endpoint Request Parameter Leakage Due to Shared Instance</td>
+    </tr>
+    <tr>
+      <td>io.quarkus:quarkus-rest-deployment</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-1247">CVE-2025-1247</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.15.1</td>
+      <td><span class="ok">3.18.2, 3.15.3.1, 3.8.6.1</span></td>
+      <td>io.quarkus:quarkus-rest: Quarkus REST Endpoint Request Parameter Leakage Due to Shared Instance</td>
+    </tr>
+    <tr>
+      <td>io.quarkus:quarkus-vertx-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-39852">CVE-2026-39852</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.15.1</td>
+      <td><span class="ok">3.20.6.1, 3.27.3.1, 3.33.1.1, 3.35.1.1</span></td>
+      <td>io.quarkus:quarkus-vertx-http: io.quarkus:quarkus-vertx-http: Authorization bypass via semicolons in HTTP requests</td>
+    </tr>
+    <tr>
+      <td>io.quarkus:quarkus-vertx-http</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-50559">CVE-2026-50559</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>3.15.1</td>
+      <td><span class="ok">3.20.6.2, 3.27.4.1, 3.33.2.1, 3.36.3, 3.37.0</span></td>
+      <td>io.quarkus/quarkus-vertx-http: Quarkus: Authorization bypass in HTTP path-based policies via encoded characters</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-14813">CVE-2025-14813</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>1.78.1</td>
+      <td><span class="ok">1.80.2, 1.81.1, 1.84</span></td>
+      <td>bouncycastle: BC-JAVA: GOSTCTR implementation unable to process more than 255 blocks correctly</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-14813">CVE-2025-14813</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>1.78.1</td>
+      <td><span class="ok">1.80.2, 1.81.1, 1.84</span></td>
+      <td>bouncycastle: BC-JAVA: GOSTCTR implementation unable to process more than 255 blocks correctly</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8763">CVE-2026-8763</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>1.78.1</td>
+      <td><span class="ok">1.85</span></td>
+      <td>org.bouncycastle/bcprov-jdk15on: org.bouncycastle/bcpkix-jdk15on: Bouncy Castle for Java: Name Constraints bypass via trailing dot in rfc822Name and URI</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-8763">CVE-2026-8763</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>1.78.1</td>
+      <td><span class="ok">1.85</span></td>
+      <td>org.bouncycastle/bcprov-jdk15on: org.bouncycastle/bcpkix-jdk15on: Bouncy Castle for Java: Name Constraints bypass via trailing dot in rfc822Name and URI</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-13506">CVE-2026-13506</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.78.1</td>
+      <td><span class="ok">1.85</span></td>
+      <td>bouncycastle: Bouncy Castle for Java: Denial of Service via lazy ASN.1 sequence processing</td>
+    </tr>
+    <tr>
+      <td>org.bouncycastle:bcprov-jdk18on</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-13506">CVE-2026-13506</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>1.78.1</td>
+      <td><span class="ok">1.85</span></td>
+      <td>bouncycastle: Bouncy Castle for Java: Denial of Service via lazy ASN.1 sequence processing</td>
+    </tr>
+    <tr>
+      <td>org.freemarker:freemarker</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-84939">CVE-2026-84939</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>2.3.32</td>
+      <td><span class="ok">2.3.35</span></td>
+      <td>org.apache.freemarker/freemarker: Apache FreeMarker: Path traversal via malformed locale identifier</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2024-10039">CVE-2024-10039</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.0.6</span></td>
+      <td>keycloak-core: mTLS passthrough</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-quarkus-server</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2024-10451">CVE-2024-10451</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">24.0.9, 26.0.6</span></td>
+      <td>org.keycloak:keycloak-quarkus-server: Sensitive Data Exposure in Keycloak Build Process</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-saml-core</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-7307">CVE-2026-7307</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.6.2</span></td>
+      <td>keycloak: Keycloak: Denial of Service via specially crafted SAML input</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-server-spi-private</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-2603">CVE-2026-2603</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.5</span></td>
+      <td>keycloak: Keycloak: Unauthorized authentication via disabled SAML Identity Provider</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-18963">CVE-2026-18963</a></td>
+      <td><span class="sev CRITICAL">CRITICAL</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.4.15, 26.6.6, 26.7.2</span></td>
+      <td>keycloak-services: keycloak-services: Unauthenticated account takeover via reset-credentials flow bypass</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2024-10270">CVE-2024-10270</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">24.0.9, 26.0.6</span></td>
+      <td>org.keycloak:keycloak-services: Keycloak Denial of Service</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-3501">CVE-2025-3501</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.2.2</span></td>
+      <td>org.keycloak.protocol.services: Keycloak hostname verification</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-1486">CVE-2026-1486</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.3, 26.4.9</span></td>
+      <td>org.keycloak.protocol.oidc.grants: Disabled identity providers are still accepted for JWT Authorization Grant</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-1529">CVE-2026-1529</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.3, 26.2.13, 26.4.9</span></td>
+      <td>org.keycloak.services.resources.organizations: Keycloak: Unauthorized organization registration via improper invitation token validation</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-2092">CVE-2026-2092</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.5</span></td>
+      <td>keycloak-services: Keycloak: Unauthorized access via improper validation of encrypted SAML assertions</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-2603">CVE-2026-2603</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.5</span></td>
+      <td>keycloak: Keycloak: Unauthorized authentication via disabled SAML Identity Provider</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-3009">CVE-2026-3009</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.5</span></td>
+      <td>org.keycloak/keycloak-services: Improper Enforcement of Disabled Identity Provider in IdentityBrokerService (Authentication Bypass)</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-3872">CVE-2026-3872</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.7</span></td>
+      <td>keycloak: Keycloak: Information disclosure due to redirect_uri validation bypass</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-4282">CVE-2026-4282</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.7</span></td>
+      <td>keycloak: Keycloak: Privilege escalation via forged authorization codes due to SingleUseObjectProvider isolation flaw</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-4634">CVE-2026-4634</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.7</span></td>
+      <td>keycloak: Keycloak: Denial of Service via excessive processing of OpenID Connect scope parameters</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-4636">CVE-2026-4636</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.5.7</span></td>
+      <td>keycloak: Keycloak: UMA policy bypass allows authenticated users to gain unauthorized access to victim-owned resources.</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-7504">CVE-2026-7504</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.6.2</span></td>
+      <td>org.keycloak/keycloak-services: Open redirect when using wildcard valid redirect URIs in Keycloak</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-7507">CVE-2026-7507</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.6.2</span></td>
+      <td>org.keycloak/keycloak-services: Session fixation in OIDC login flow that can lead to account takeover</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-7571">CVE-2026-7571</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.6.2</span></td>
+      <td>keycloak: Keycloak: Access token disclosure and implicit flow bypass via forged client data</td>
+    </tr>
+    <tr>
+      <td>org.keycloak:keycloak-services</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-9795">CVE-2026-9795</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>26.0.5</td>
+      <td><span class="ok">26.6.4</span></td>
+      <td>keycloak: Keycloak: Privilege escalation via improper scope mapping enforcement</td>
+    </tr>
+    <tr>
+      <td>org.postgresql:postgresql</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2025-49146">CVE-2025-49146</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>42.7.4</td>
+      <td><span class="ok">42.7.7</span></td>
+      <td>pgjdbc: pgjdbc insecure authentication in channel binding</td>
+    </tr>
+    <tr>
+      <td>org.postgresql:postgresql</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-42198">CVE-2026-42198</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>42.7.4</td>
+      <td><span class="ok">42.7.11</span></td>
+      <td>jdbc.postgresql.org: pgjdbc: Client-side Denial of Service via malicious SCRAM-SHA-256 authentication</td>
+    </tr>
+    <tr>
+      <td>org.postgresql:postgresql</td>
+      <td><a href="https://avd.aquasec.com/nvd/cve-2026-54291">CVE-2026-54291</a></td>
+      <td><span class="sev HIGH">HIGH</span></td>
+      <td>42.7.4</td>
+      <td><span class="ok">42.7.12</span></td>
+      <td>org.postgresql/postgresql: com.ongres.scram/scram-client: pgjdbc: Man-in-the-middle protection bypass via SCRAM-SHA-256-PLUS downgrade</td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
